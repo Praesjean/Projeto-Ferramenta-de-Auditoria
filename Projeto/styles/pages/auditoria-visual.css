@@ -1,4 +1,3 @@
-/* Tabela estilo Excel */
 .checklist-table {
     width: 100%;
     border-collapse: collapse;
@@ -25,13 +24,11 @@
     background-color: #a6f2a0;
 }
 
-/* Inputs radio */
 .checklist-table input[type=radio] {
     transform: scale(1.3);
     margin: 0 5px;
 }
 
-/* Lista de NCs */
 #nc-list {
     margin-top: 25px;
 }

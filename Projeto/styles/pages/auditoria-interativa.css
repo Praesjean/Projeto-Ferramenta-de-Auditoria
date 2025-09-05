@@ -1,46 +1,92 @@
-/* Tabela estilo Excel */
-.checklist-table {
+.audit-table {
     width: 100%;
     border-collapse: collapse;
-    margin-top: 20px;
-    font-size: 16px;
+    margin-bottom: 25px;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    background-color: #fff;
 }
 
-.checklist-table th, .checklist-table td {
-    border: 1px solid #999;
+.audit-table th, .audit-table td {
+    border: 1px solid #cce5cc;
     padding: 12px;
     text-align: center;
+    vertical-align: middle;
+    transition: background-color 0.3s ease;
 }
 
-.checklist-table th {
-    background-color: #28a745;
-    color: white;
+.audit-table th {
+    background-color: #d4edda;
+    color: #155724;
+    font-weight: bold;
 }
 
-.checklist-table tr:nth-child(even) {
-    background-color: #d1f7c4;
+.audit-row:nth-child(even) {
+    background-color: #f7fff7;
 }
 
-.checklist-table tr:nth-child(odd) {
-    background-color: #a6f2a0;
+.audit-row:hover {
+    background-color: #e2f0e2;
 }
 
-/* Inputs radio */
-.checklist-table input[type=radio] {
-    transform: scale(1.3);
-    margin: 0 5px;
+.audit-row.selected {
+    background-color: #fff3cd;
+    animation: highlightNC 0.5s ease-in-out;
 }
 
-/* Lista de NCs */
-#nc-list {
-    margin-top: 25px;
+@keyframes highlightNC {
+    from { background-color: #fffbe0; }
+    to { background-color: #fff3cd; }
 }
 
 .nc-item {
-    padding: 12px;
-    margin-bottom: 10px;
-    border-left: 6px solid #ff9800;
-    background-color: #fff3cd;
-    border-radius: 6px;
+    display: flex;
+    gap: 10px;
+    margin: 5px 0 15px 40px;
+    opacity: 0;
+    transform: translateY(-5px);
+    animation: fadeIn 0.4s forwards;
+}
+
+.nc-item label {
     font-weight: bold;
+    white-space: nowrap;
+}
+
+.nc-item input[type="text"] {
+    flex: 1;
+    padding: 8px;
+    border-radius: 6px;
+    border: 1px solid #28a745;
+}
+
+@keyframes fadeIn {
+    to { opacity: 1; transform: translateY(0); }
+}
+
+.submit-btn {
+    background-color: #28a745;
+    color: #fff;
+    padding: 14px 40px;
+    font-size: 18px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    border: none;
+}
+
+.submit-btn:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+}
+
+@media (max-width: 768px) {
+    .audit-table th, .audit-table td {
+        padding: 10px;
+        font-size: 14px;
+    }
+    .submit-btn {
+        width: 100%;
+        padding: 12px;
+        font-size: 16px;
+    }
 }
