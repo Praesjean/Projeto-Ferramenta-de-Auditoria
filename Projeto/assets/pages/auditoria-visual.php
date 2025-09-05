@@ -1,39 +1,53 @@
 <?php include("../../conecta_db.php"); ?>
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Auditoria Visual</title>
-    <link rel="stylesheet" href="../../styles/global/global.css">
-    <link rel="stylesheet" href="../../styles/pages/auditoria-visual.css">
-    <script src="../../scripts/pages/global.js" defer></script>
-    <script src="../../scripts/pages/auditoria-visual.js" defer></script>
-</head>
-<body>
-<div class="container">
-<h2>Checklist Visual</h2>
-<h3>Percentual de aderência: <span id="aderencia">0%</span></h3>
+    <head>
+        <title>Auditoria Visual</title>
+        <link rel="stylesheet" href="../../styles/global/global.css">
+        <link rel="stylesheet" href="../../styles/pages/auditoria-visual.css">
+        <script src="../../scripts/pages/global.js" defer></script>
+    </head>
+    <body>
+        <div class="container">
+            <h2>Checklist Final</h2>
+            <h3>Percentual de aderência:</h3>
+            <div id="progress" class="progress-circle">0%</div>
 
-<?php
-$auditoria_id = $_POST['auditoria_id'] ?? 0;
-$checklist = $conn->query("SELECT * FROM checklist");
-?>
+            <?php
+                $auditoria_id = $_POST['auditoria_id'] ?? 0;
+                $checklist = $conn->query("SELECT * FROM checklist");
+            ?>
 
-<form method="post" action="auditoria-alertas.php">
-<input type="hidden" name="auditoria_id" value="<?= $auditoria_id ?>">
-<?php while($item = $checklist->fetch_assoc()){ ?>
-<div class="checklist-item">
-<p><b><?= $item['pergunta'] ?></b></p>
-<label><input type="radio" name="resposta[<?= $item['id'] ?>]" value="Sim" required onclick="atualizarNC(<?= $item['id'] ?>,'Sim')"> Sim</label>
-<label><input type="radio" name="resposta[<?= $item['id'] ?>]" value="Nao" onclick="atualizarNC(<?= $item['id'] ?>,'Nao')"> Não</label>
-<label><input type="radio" name="resposta[<?= $item['id'] ?>]" value="NA" onclick="atualizarNC(<?= $item['id'] ?>,'NA')"> N/A</label>
-</div>
-<?php } ?>
+            <table class="checklist-table">
+                <thead>
+                    <tr>
+                        <th>Pergunta</th>
+                        <th>Resposta</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <?php while($item = $checklist->fetch_assoc()){ ?>
+                        <tr>
+                            <td><?= $item['pergunta'] ?></td>
+                            <td><?= $_POST['resposta'][$item['id']] ?? '-' ?></td>
+                        </tr>
+                    <?php } ?>
+                </tbody>
+            </table>
 
-<h3>Não Conformidades:</h3>
-<div id="nc-list"></div>
-
-<button type="submit">Finalizar</button>
-</form>
-</div>
-</body>
+            <h3>Não Conformidades</h3>
+            <div id="nc-list">
+                <?php
+                if(isset($_POST['resposta'])){
+                    foreach($_POST['resposta'] as $id_checklist => $resposta){
+                        if($resposta == 'Nao'){
+                            echo "<div class='nc-item'>Não conformidade no item {$id_checklist}</div>";
+                        }
+                    }
+                }
+                ?>
+            </div>
+            <script src="../../scripts/pages/auditoria-visual.js"></script>
+        </div>
+    </body>
 </html>
