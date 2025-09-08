@@ -118,6 +118,7 @@ $nc_list = $stmt->get_result();
                     <th>Descrição</th>
                     <th>Status</th>
                     <th>Atualizar</th>
+                    <th>Ações</th>
                 </tr>
                 <?php while ($nc = $nc_list->fetch_assoc()) { ?>
                     <tr>
@@ -135,6 +136,12 @@ $nc_list = $stmt->get_result();
                                     <option value="RESOLVIDA" <?php if($nc['status']=="RESOLVIDA") echo "selected"; ?>>RESOLVIDA</option>
                                 </select>
                                 <button type="submit" name="atualizar">Salvar</button>
+                            </form>
+                        </td>
+                        <td>
+                            <form method="POST" action="../../enviar_nc.php">
+                                <input type="hidden" name="nc_id" value="<?php echo $nc['id']; ?>">
+                                <button type="submit">✉️ Enviar e-mail</button>
                             </form>
                         </td>
                     </tr>
