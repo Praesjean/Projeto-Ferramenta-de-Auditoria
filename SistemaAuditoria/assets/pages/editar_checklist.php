@@ -72,15 +72,80 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <title>Editar Checklist</title>
     <style>
         body { font-family: Arial; background: #f4f6f8; padding: 20px; }
-        .container { background: white; padding: 20px; border-radius: 8px; max-width: 600px; margin:auto; box-shadow:0 2px 8px rgba(0,0,0,0.2); }
-        input, textarea { width:100%; padding:10px; margin:5px 0; border:1px solid #ccc; border-radius:5px; }
-        button { padding:10px 15px; background:#0077cc; color:white; border:none; border-radius:5px; cursor:pointer; }
-        button:hover { background:#005fa3; }
-        .mensagem { color:green; text-align:center; margin-bottom:10px; }
-        h2 { text-align:center; }
-        .add-btn { background:#28a745; margin-top:5px; }
-        .add-btn:hover { background:#218838; }
-        .voltar { display:block; margin-top:15px; text-align:center; }
+        .container { 
+            background: white; 
+            padding: 20px; 
+            border-radius: 8px; 
+            max-width: 600px; 
+            margin:auto; 
+            box-shadow:0 2px 8px rgba(0,0,0,0.2); 
+            box-sizing: border-box;
+        }
+
+        input, textarea { 
+            width: 100%; 
+            padding: 10px; 
+            margin:5px 0; 
+            border:1px solid #ccc; 
+            border-radius:5px; 
+            box-sizing: border-box;
+            font-size: 16px;
+        }
+
+        button { 
+            padding:10px 15px; 
+            background:#0077cc; 
+            color:white; 
+            border:none; 
+            border-radius:5px; 
+            cursor:pointer; 
+            transition: 0.2s;
+            font-size: 16px;
+        }
+
+        button:hover { 
+            background:#005fa3; 
+        }
+
+        .add-btn { 
+            background:#28a745; 
+            margin-top:5px; 
+            font-size: 16px;
+        }
+
+        .add-btn:hover { 
+            background:#218838; 
+        }
+
+        .mensagem { 
+            color:green; 
+            text-align:center; 
+            margin-bottom:10px;
+            font-size: 16px;
+        }
+
+        h2 { 
+            text-align:center; 
+        }
+
+        .voltar {
+            display: block;
+            width: fit-content;
+            margin: 20px auto 0 auto;
+            text-align: center;
+            text-decoration: none;
+            color: black;
+            background: #bababaff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.2s;
+            font-size: 16px;
+        }
+
+        .voltar:hover {
+            background: #979797ff;
+            transform: scale(1.05);
+        }
     </style>
     <script>
         function adicionarItem() {

@@ -72,9 +72,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin: 6px 0;
             border: 1px solid #ccc;
             border-radius: 5px;
+            box-sizing: border-box;
+            font-size: 16px;
         }
-        .itens input {
+
+        #itens input {
+            width: 100%;
+            box-sizing: border-box;
             margin-bottom: 5px;
+            font-size: 16px;
         }
         button {
             padding: 10px 15px;
@@ -83,6 +89,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             color: white;
             border-radius: 5px;
             cursor: pointer;
+            font-size: 16px;
         }
         button:hover {
             background: #005fa3;
@@ -91,15 +98,30 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-top: 10px;
             color: green;
             text-align: center;
+            font-size: 16px;
         }
         .voltar {
             display: block;
-            margin-top: 15px;
+            width: fit-content;
+            margin: 20px auto 0 auto;
             text-align: center;
+            text-decoration: none;
+            color: black;
+            background: #bababaff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.2s;
+            font-size: 16px;
+        }
+
+        .voltar:hover {
+            background: #979797ff;
+            transform: scale(1.05);
         }
         .add-btn {
             margin-top: 8px;
             background: #28a745;
+            font-size: 16px;
         }
         .add-btn:hover {
             background: #1e7e34;
@@ -138,7 +160,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <div class="mensagem"><?php echo $mensagem; ?></div>
 
-        <a class="voltar" href="dashboard.php">⬅ Voltar ao Dashboard</a>
+        <a class="voltar" href="dashboard.php">⬅ Voltar</a>
     </div>
 </body>
 </html>

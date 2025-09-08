@@ -54,23 +54,47 @@ $resultado = $stmt->get_result();
         }
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             margin-top: 15px;
+            border-radius: 12px;
+            overflow: hidden;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+            font-size: 16px;
         }
+
         th, td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: center;
+            font-size: 16px;
         }
+
         th {
             background: #0077cc;
             color: white;
+        }
+
+        th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        tr:last-child td:first-child {
+            border-bottom-left-radius: 12px;
+        }
+
+        tr:last-child td:last-child {
+            border-bottom-right-radius: 12px;
         }
         a {
             text-decoration: none;
             padding: 6px 10px;
             border-radius: 5px;
-            font-size: 14px;
+            font-size: 16px;
         }
         .editar {
             background: #ffc107;
@@ -80,15 +104,42 @@ $resultado = $stmt->get_result();
             background: #dc3545;
             color: white;
         }
+        a.editar:hover {
+            background: #e0a800;
+            transform: scale(1.05);
+            transition: 0.2s;
+            font-size: 16px;
+        }
+
+        a.excluir:hover {
+            background: #c82333;
+            transform: scale(1.05);
+            transition: 0.2s;
+            font-size: 16px;
+        }
         .voltar {
             display: block;
+            width: fit-content;
+            margin: 20px auto 0 auto;
             text-align: center;
-            margin-top: 20px;
+            text-decoration: none;
+            color: black;
+            background: #bababaff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.2s;
+            font-size: 16px;
+        }
+
+        .voltar:hover {
+            background: #979797ff;
+            transform: scale(1.05);
         }
         .mensagem {
             text-align: center;
             margin: 10px 0;
             color: green;
+            font-size: 16px;
         }
     </style>
 </head>
@@ -118,7 +169,7 @@ $resultado = $stmt->get_result();
             <?php } ?>
         </table>
 
-        <a class="voltar" href="dashboard.php">⬅ Voltar ao Dashboard</a>
+        <a class="voltar" href="dashboard.php">⬅ Voltar</a>
     </div>
 </body>
 </html>

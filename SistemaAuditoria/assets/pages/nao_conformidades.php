@@ -53,27 +53,36 @@ $nc_list = $stmt->get_result();
         .container {
             background: white;
             padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
-            max-width: 900px;
+            border-radius: 10px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+            max-width: 1000px;
             margin: auto;
         }
         h2 {
             text-align: center;
+            margin-bottom: 30px;
         }
         .mensagem {
             text-align: center;
             color: green;
+            margin-bottom: 15px;
+            font-size: 16px;
         }
         table {
             width: 100%;
-            border-collapse: collapse;
+            border-collapse: separate;
+            border-spacing: 0;
             margin-top: 15px;
+            margin-bottom: 40px;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
         th, td {
             border: 1px solid #ddd;
             padding: 10px;
             text-align: center;
+            font-size: 16px;
         }
         th {
             background: #0077cc;
@@ -84,28 +93,51 @@ $nc_list = $stmt->get_result();
         }
         select {
             padding: 5px;
+            font-size: 16px;
+            border-radius: 5px;
         }
         button {
-            padding: 5px 10px;
+            padding: 6px 12px;
             background: #28a745;
             color: white;
             border: none;
-            border-radius: 5px;
+            border-radius: 6px;
             cursor: pointer;
+            font-size: 16px;
+            transition: background 0.3s, transform 0.2s;
         }
         button:hover {
             background: #218838;
+            transform: scale(1.03);
+        }
+        .enviar-btn {
+            background: #0077cc;
+        }
+        .enviar-btn:hover {
+            background: #005fa3;
         }
         .voltar {
             display: block;
-            margin-top: 15px;
+            width: fit-content;
+            margin: 20px auto 0 auto;
             text-align: center;
+            text-decoration: none;
+            color: black;
+            background: #bababaff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.2s;
+            font-size: 16px;
+        }
+        .voltar:hover {
+            background: #979797ff;
+            transform: scale(1.05);
         }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>🛠️ Não Conformidades</h2>
+        <h2>Não Conformidades</h2>
 
         <?php if ($mensagem) echo "<p class='mensagem'>$mensagem</p>"; ?>
 
@@ -115,7 +147,6 @@ $nc_list = $stmt->get_result();
                     <th>ID</th>
                     <th>Checklist</th>
                     <th>Auditoria</th>
-                    <th>Descrição</th>
                     <th>Status</th>
                     <th>Atualizar</th>
                     <th>Ações</th>
@@ -125,7 +156,6 @@ $nc_list = $stmt->get_result();
                         <td><?php echo $nc['nc_id']; ?></td>
                         <td><?php echo htmlspecialchars($nc['checklist']); ?></td>
                         <td><?php echo $nc['auditoria_id']; ?></td>
-                        <td><?php echo htmlspecialchars($nc['descricao']); ?></td>
                         <td><?php echo $nc['status']; ?></td>
                         <td>
                             <form method="POST" action="">
@@ -141,17 +171,19 @@ $nc_list = $stmt->get_result();
                         <td>
                             <form method="POST" action="enviar_nc.php">
                                 <input type="hidden" name="nc_id" value="<?php echo $nc['nc_id']; ?>">
-                                <button type="submit">✉️ Enviar e-mail</button>
+                                <button type="submit" class="enviar-btn">Enviar por e-mail</button>
                             </form>
                         </td>
                     </tr>
                 <?php } ?>
             </table>
         <?php } else { ?>
-            <p>Nenhuma não conformidade encontrada.</p>
+            <p style="text-align:center;">Nenhuma não conformidade encontrada.</p>
         <?php } ?>
 
-        <a class="voltar" href="dashboard.php">⬅ Voltar ao Dashboard</a>
+        <div style="text-align:center;">
+            <a class="voltar" href="dashboard.php">⬅ Voltar</a>
+        </div>
     </div>
 </body>
 </html>

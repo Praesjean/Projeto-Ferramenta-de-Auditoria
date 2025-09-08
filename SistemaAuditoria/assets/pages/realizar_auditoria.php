@@ -76,6 +76,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
             box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
             max-width: 800px;
             margin: auto;
+            box-sizing: border-box;
         }
         h2 {
             text-align: center;
@@ -84,40 +85,83 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
             text-align: center;
             margin: 10px 0;
             color: green;
+            font-size: 16px;
         }
         .voltar {
             display: block;
-            margin-top: 15px;
+            width: fit-content;
+            margin: 20px auto 0 auto;
             text-align: center;
+            text-decoration: none;
+            color: black;
+            background: #bababaff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.2s;
+            font-size: 16px;
+        }
+        .voltar:hover {
+            background: #979797ff;
+            transform: scale(1.05);
+        }
+        label, select, button {
+            font-size: 16px;
+        }
+
+        select, button {
+            width: 100%;
+            max-width: 300px;
+            padding: 8px;
+            margin: 8px 0;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            box-sizing: border-box;
+            cursor: pointer;
+        }
+        button {
+            background: #28a745;
+            color: white;
+            border: none;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        button:hover {
+            background: #218838;
+            transform: scale(1.03);
         }
         table {
             width: 100%;
-            margin-top: 15px;
             border-collapse: collapse;
+            margin-top: 15px;
+            border-radius: 10px;
+            overflow: hidden;
+            font-size: 16px;
         }
+
         th, td {
             border: 1px solid #ddd;
-            padding: 8px;
+            padding: 10px;
             text-align: center;
+            font-size: 16px;
         }
+
         th {
             background: #0077cc;
             color: white;
         }
-        select {
-            padding: 5px;
-        }
-        button {
-            margin-top: 15px;
+
+        button[type="submit"] {
+            display: block;
+            margin: 20px auto 0 auto;
+            width: 200px;
             padding: 10px 15px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
+            border-radius: 8px;
             cursor: pointer;
         }
-        button:hover {
+
+        button[type="submit"]:hover {
             background: #218838;
+            transform: scale(1.03);
         }
     </style>
     <script>
@@ -184,7 +228,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
         }
         ?>
 
-        <a class="voltar" href="dashboard.php">⬅ Voltar ao Dashboard</a>
+        <a class="voltar" href="dashboard.php">⬅ Voltar</a>
     </div>
 </body>
 </html>

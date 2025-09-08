@@ -39,26 +39,81 @@ $stmtRes->bind_param("i", $auditoria_id);
 $stmtRes->execute();
 $respostas = $stmtRes->get_result();
 ?>
-
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
     <title>Detalhes da Auditoria</title>
     <style>
-        body { font-family: Arial; background:#f4f6f8; padding:20px; }
-        .container { background:white; padding:20px; border-radius:8px; max-width:800px; margin:auto; box-shadow:0 2px 8px rgba(0,0,0,0.2); }
-        h2, h3 { text-align:center; }
-        table { width:100%; border-collapse:collapse; margin-top:15px; }
-        th, td { border:1px solid #ddd; padding:10px; text-align:center; }
-        th { background:#0077cc; color:white; }
-        tr:nth-child(even) { background:#f9f9f9; }
-        .voltar { display:block; margin-top:15px; text-align:center; }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f4f6f8;
+            padding: 20px;
+        }
+        .container {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 900px;
+            margin: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+        }
+        h2 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        h3 {
+            text-align: center;
+            margin-bottom: 15px;
+        }
+        p {
+            font-size: 16px;
+            margin: 10px 0;
+        }
+        table {
+            width: 100%;
+            border-collapse: separate;
+            border-spacing: 0;
+            margin-top: 15px;
+            border-radius: 10px;
+            box-shadow: 0px 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        th, td {
+            border: 1px solid #ddd;
+            padding: 10px;
+            text-align: center;
+            font-size: 16px;
+        }
+        th {
+            background: #0077cc;
+            color: white;
+        }
+        tr:nth-child(even) {
+            background: #f9f9f9;
+        }
+        .voltar {
+            display: block;
+            width: fit-content;
+            margin: 20px auto 0 auto;
+            text-align: center;
+            text-decoration: none;
+            color: black;
+            background: #bababaff;
+            padding: 10px 20px;
+            border-radius: 8px;
+            transition: background 0.3s, transform 0.2s;
+            font-size: 16px;
+        }
+        .voltar:hover {
+            background: #979797ff;
+            transform: scale(1.05);
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <h2>📋 Auditoria: <?php echo htmlspecialchars($auditoria['titulo']); ?></h2>
+        <h2>Auditoria: <?php echo htmlspecialchars($auditoria['titulo']); ?></h2>
         <p><strong>Descrição do Checklist:</strong> <?php echo htmlspecialchars($auditoria['checklist_desc']); ?></p>
         <p><strong>Auditor:</strong> <?php echo htmlspecialchars($auditoria['auditor']); ?></p>
         <p><strong>Data:</strong> <?php echo date("d/m/Y H:i", strtotime($auditoria['realizado_em'])); ?></p>
@@ -82,7 +137,9 @@ $respostas = $stmtRes->get_result();
             <?php } ?>
         </table>
 
-        <a class="voltar" href="historico.php">⬅ Voltar</a>
+        <div style="text-align:center;">
+            <a class="voltar" href="historico.php">⬅ Voltar</a>
+        </div>
     </div>
 </body>
 </html>
