@@ -139,8 +139,8 @@ $nc_list = $stmt->get_result();
                             </form>
                         </td>
                         <td>
-                            <form method="POST" action="../../enviar_nc.php">
-                                <input type="hidden" name="nc_id" value="<?php echo $nc['id']; ?>">
+                            <form method="POST" action="enviar_nc.php">
+                                <input type="hidden" name="nc_id" value="<?php echo $nc['nc_id']; ?>">
                                 <button type="submit">✉️ Enviar e-mail</button>
                             </form>
                         </td>
