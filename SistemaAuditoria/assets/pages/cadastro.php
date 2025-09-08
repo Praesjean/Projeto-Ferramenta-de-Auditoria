@@ -1,5 +1,5 @@
 <?php
-include 'conecta_db.php';
+include('../../conecta_db.php');
 
 $mensagem = "";
 
