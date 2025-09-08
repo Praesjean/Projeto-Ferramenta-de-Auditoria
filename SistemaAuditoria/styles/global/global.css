@@ -49,3 +49,10 @@ a {
 a:hover {
     color: #1e7e34;
 }
+
+.span-required {
+    display: none;
+    font-size: 13px;
+    color:#e63636;
+    margin: 1px 0 0 5px;
+}
