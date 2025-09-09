@@ -16,7 +16,7 @@ if (isset($_GET['excluir'])) {
     $stmt = $conn->prepare($sql);
     $stmt->bind_param("ii", $id, $usuario_id);
     if ($stmt->execute()) {
-        $mensagem = "✅ Checklist excluído com sucesso!";
+        $mensagem = "Checklist excluído!";
     } else {
         $mensagem = "Erro ao excluir checklist.";
     }
@@ -153,10 +153,6 @@ $resultado = $stmt->get_result();
     <div class="container">
         <h2>Gerenciar Checklists</h2>
 
-        <h2>Gerenciar Checklists</h2>
-
-        <?php if ($mensagem) echo "<p class='mensagem'>$mensagem</p>"; ?>
-
         <?php if ($resultado->num_rows > 0) { ?>
             <table>
                 <tr>
@@ -172,7 +168,7 @@ $resultado = $stmt->get_result();
                         <td><?php echo $row['criado_em']; ?></td>
                         <td>
                             <a class="editar" href="editar_checklist.php?id=<?php echo $row['id']; ?>">Editar</a>
-                            <a class="excluir" href="gerenciar_checklists.php?excluir=<?php echo $row['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este checklist?')">Excluir</a>
+                            <a class="excluir" href="#" onclick="confirmarExclusao(<?php echo $row['id']; ?>)">Excluir</a>
                         </td>
                     </tr>
                 <?php } ?>
@@ -184,4 +180,47 @@ $resultado = $stmt->get_result();
         <a class="voltar" href="dashboard.php">⬅ Voltar</a>
     </div>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script>
+function confirmarExclusao(id) {
+    Swal.fire({
+        title: 'Tem certeza?',
+        text: "Você não poderá reverter essa ação!",
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonColor: '#dc3545',
+        cancelButtonColor: '#6c757d',
+        confirmButtonText: 'Sim, excluir!',
+        cancelButtonText: 'Cancelar'
+    }).then((result) => {
+        if (result.isConfirmed) {
+            window.location.href = 'gerenciar_checklists.php?excluir=' + id;
+        }
+    });
+}
+</script>
+<script>
+<?php if ($mensagem): ?>
+Swal.fire({
+    icon: '<?php echo strpos($mensagem, "Erro") !== false ? "error" : "success"; ?>',
+    title: '<?php echo $mensagem; ?>',
+    showConfirmButton: true,
+    confirmButtonText: 'OK',
+    confirmButtonColor: '#28a745',
+    customClass: {
+        confirmButton: 'swal2-confirm-green',
+    }
+});
+<?php endif; ?>
+</script>
+
+<style>
+.swal2-confirm-green {
+    border: none !important;
+    box-shadow: none !important;
+    font-weight: normal !important;
+}
+</style>
+
 </html>

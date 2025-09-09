@@ -34,7 +34,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 }
             }
 
-            $mensagem = "✅ Checklist criado com sucesso!";
+            $mensagem = "Checklist criado!";
         } else {
             $mensagem = "Erro: " . $stmt->error;
         }
@@ -158,12 +158,33 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <button type="submit">Salvar Checklist</button>
         </form>
 
-        <div class="mensagem"><?php echo $mensagem; ?></div>
-
         <a class="voltar" href="dashboard.php">⬅ Voltar</a>
     </div>
 </body>
 
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script src="../../script/create-checklist.js"></script>
+
+<script>
+<?php if ($mensagem): ?>
+Swal.fire({
+    icon: '<?php echo strpos($mensagem, "Erro") !== false ? "error" : "success"; ?>',
+    title: '<?php echo $mensagem; ?>',
+    showConfirmButton: true,
+    confirmButtonText: 'OK',
+    confirmButtonColor: '<?php echo strpos($mensagem, "Erro") !== false ? "#dc3545" : "#28a745"; ?>',
+    customClass: {
+        confirmButton: 'swal2-confirm-custom'
+    }
+});
+<?php endif; ?>
+</script>
+<style>
+.swal2-confirm-custom {
+    border: none !important;
+    box-shadow: none !important;
+    font-weight: normal !important;
+}
+</style>
 
 </html>
