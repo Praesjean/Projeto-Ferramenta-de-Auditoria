@@ -46,7 +46,6 @@ function adicionarItem(valor = "") {
     input.name = "itens[]";
     input.value = valor;
     input.placeholder = "Descrição do item";
-    input.required = true;
     input.style.flex = "1";
     input.style.padding = "8px";
     input.style.fontSize = "16px";
