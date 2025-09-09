@@ -54,7 +54,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
         }
     }
 
-    $mensagem = "✅ Auditoria concluída! Resultado: $resultado_final% de aderência.";
+    $mensagem = true;
 }
 ?>
 
@@ -177,8 +177,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
     <div class="container">
         <h2>Realizar Auditoria</h2>
 
-        <?php if ($mensagem) echo "<p class='mensagem'>$mensagem</p>"; ?>
-
         <form method="GET" action="">
             <label>Selecione um Checklist:</label>
             <select id="checklist_id" name="checklist_id" onchange="carregarItens()">
@@ -231,4 +229,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
         <a class="voltar" href="dashboard.php">⬅ Voltar</a>
     </div>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<?php if (!is_null($resultado_final)): ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Auditoria concluída!',
+    showConfirmButton: true,
+    confirmButtonText: 'OK',
+    confirmButtonColor: '#28a745'
+}).then(() => {
+    Swal.fire({
+        icon: 'info',
+        title: 'Resultado da Auditoria',
+        text: 'Resultado: <?php echo $resultado_final; ?>% de aderência.',
+        showConfirmButton: true,
+        confirmButtonText: 'OK',
+        confirmButtonColor: '#28a745'
+    });
+});
+</script>
+<?php endif; ?>
+
 </html>
