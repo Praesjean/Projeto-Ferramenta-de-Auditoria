@@ -1,10 +1,11 @@
-function showSuccess(message, redirectUrl = null) {
+function showSuccess(message, redirectUrl) {
   Swal.fire({
-    title: 'Sucesso!',
-    text: message,
     icon: 'success',
-    confirmButtonColor: '#081369ff',
-    confirmButtonText: 'Ok'
+    title: 'Sucesso',
+    text: message,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    backdrop: true
   }).then(() => {
     if (redirectUrl) {
       window.location.href = redirectUrl;
@@ -14,10 +15,11 @@ function showSuccess(message, redirectUrl = null) {
 
 function showError(message) {
   Swal.fire({
-    title: 'Erro!',
-    text: message,
     icon: 'error',
-    confirmButtonColor: '#081369ff',
-    confirmButtonText: 'Entendido'
+    title: 'Erro',
+    text: message,
+    allowOutsideClick: false,
+    allowEscapeKey: false,
+    backdrop: true
   });
 }
