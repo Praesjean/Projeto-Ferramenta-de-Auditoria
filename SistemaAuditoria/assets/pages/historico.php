@@ -93,6 +93,13 @@ $auditorias = $stmt->get_result();
             background: #218838;
             transform: scale(1.05);
         }
+
+        .sem-auditoria {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
@@ -124,7 +131,7 @@ $auditorias = $stmt->get_result();
                 } ?>
             </table>
         <?php } else { ?>
-            <p>Nenhuma auditoria realizada até o momento.</p>
+            <p class="sem-auditoria">Nenhuma auditoria realizada até o momento.</p>
         <?php } ?>
 
         <a class="voltar" href="dashboard.php">⬅ Voltar</a>

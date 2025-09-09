@@ -60,7 +60,6 @@ $nc_list = $stmt->get_result();
         }
         h2 {
             text-align: center;
-            margin-bottom: 30px;
         }
         .mensagem {
             text-align: center;
@@ -133,6 +132,12 @@ $nc_list = $stmt->get_result();
             background: #979797ff;
             transform: scale(1.05);
         }
+        .sem-nao-conformidades {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
@@ -178,7 +183,7 @@ $nc_list = $stmt->get_result();
                 <?php } ?>
             </table>
         <?php } else { ?>
-            <p style="text-align:center;">Nenhuma não conformidade encontrada.</p>
+            <p class="sem-nao-conformidades">Nenhuma não conformidade encontrada.</p>
         <?php } ?>
 
         <div style="text-align:center;">

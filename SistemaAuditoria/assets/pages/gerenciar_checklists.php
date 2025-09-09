@@ -2,7 +2,6 @@
 session_start();
 include('../../conecta_db.php');
 
-
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit;
@@ -141,33 +140,46 @@ $resultado = $stmt->get_result();
             color: green;
             font-size: 16px;
         }
+
+        .sem-checklist {
+            text-align: center;
+            margin: 20px 0;
+            font-size: 16px;
+            color: #555;
+        }
     </style>
 </head>
 <body>
     <div class="container">
         <h2>Gerenciar Checklists</h2>
 
+        <h2>Gerenciar Checklists</h2>
+
         <?php if ($mensagem) echo "<p class='mensagem'>$mensagem</p>"; ?>
 
-        <table>
-            <tr>
-                <th>Título</th>
-                <th>Auditor</th>
-                <th>Criado em</th>
-                <th>Ações</th>
-            </tr>
-            <?php while ($row = $resultado->fetch_assoc()) { ?>
+        <?php if ($resultado->num_rows > 0) { ?>
+            <table>
                 <tr>
-                    <td><?php echo htmlspecialchars($row['titulo']); ?></td>
-                    <td><?php echo htmlspecialchars($row['auditor']); ?></td>
-                    <td><?php echo $row['criado_em']; ?></td>
-                    <td>
-                        <a class="editar" href="editar_checklist.php?id=<?php echo $row['id']; ?>">Editar</a>
-                        <a class="excluir" href="gerenciar_checklists.php?excluir=<?php echo $row['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este checklist?')">Excluir</a>
-                    </td>
+                    <th>Título</th>
+                    <th>Auditor</th>
+                    <th>Criado em</th>
+                    <th>Ações</th>
                 </tr>
-            <?php } ?>
-        </table>
+                <?php while ($row = $resultado->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?php echo htmlspecialchars($row['titulo']); ?></td>
+                        <td><?php echo htmlspecialchars($row['auditor']); ?></td>
+                        <td><?php echo $row['criado_em']; ?></td>
+                        <td>
+                            <a class="editar" href="editar_checklist.php?id=<?php echo $row['id']; ?>">Editar</a>
+                            <a class="excluir" href="gerenciar_checklists.php?excluir=<?php echo $row['id']; ?>" onclick="return confirm('Tem certeza que deseja excluir este checklist?')">Excluir</a>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+        <?php } else { ?>
+            <p class="sem-checklist">Nenhum checklist cadastrado até o momento.</p>
+        <?php } ?>
 
         <a class="voltar" href="dashboard.php">⬅ Voltar</a>
     </div>

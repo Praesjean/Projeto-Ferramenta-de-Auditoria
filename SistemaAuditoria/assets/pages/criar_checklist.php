@@ -126,14 +126,15 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         .add-btn:hover {
             background: #1e7e34;
         }
-    </style>
-    <script>
-        function adicionarItem() {
-            let div = document.createElement("div");
-            div.innerHTML = '<input type="text" name="itens[]" placeholder="Descrição do item" required>';
-            document.getElementById("itens").appendChild(div);
+        .add-template-btn {
+            margin-top: 8px;
+            background: #6f42c1;
+            font-size: 16px;
         }
-    </script>
+        .add-template-btn {
+            background: #5a369dff;
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -149,10 +150,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <input type="text" name="auditor" required>
 
             <h3>Itens do Checklist</h3>
-            <div id="itens">
-                <input type="text" name="itens[]" placeholder="Descrição do item" required>
-            </div>
+            <div id="itens"></div>
             <button type="button" class="add-btn" onclick="adicionarItem()">+ Adicionar Item</button>
+            <button type="button" class="add-template-btn" onclick="usarTemplate()">Usar Checklist Pré-definido</button>
 
             <br><br>
             <button type="submit">Salvar Checklist</button>
@@ -163,4 +163,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         <a class="voltar" href="dashboard.php">⬅ Voltar</a>
     </div>
 </body>
+
+<script src="../../script/create-checklist.js"></script>
+
 </html>
