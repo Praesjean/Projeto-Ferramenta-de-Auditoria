@@ -52,8 +52,60 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            padding: 20px;
+            background: #f0f4f7;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding-top: 90px;
+            padding-bottom: 100px;
+        }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 30px;
+            background: #0077cc;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .header .user-info p {
+            margin: 2px 0;
+            font-weight: normal;
+            font-size: 16px;
+        }
+
+        .header h1 {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .header .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .header .logout-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
         }
         .container {
             background: white;
@@ -61,7 +113,8 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             border-radius: 8px;
             box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
             max-width: 600px;
-            margin: auto;
+            margin: 20px auto;
+            box-sizing: border-box;
         }
         h2 {
             text-align: center;
@@ -140,9 +193,35 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             margin-top: 2px;
             display: block;
         }
+        footer {
+            background: #0077cc;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            line-height: 1.5em;
+        }
     </style>
 </head>
 <body>
+    <header class="header">
+        <div class="user-info">
+            <p>Nome: <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></p>
+            <p>E-mail: <?php echo htmlspecialchars($_SESSION['usuario_email']); ?></p>
+        </div>
+
+        <h1>Sistema de Auditoria</h1>
+
+        <div>
+            <a href="logout.php" class="logout-btn">Sair</a>
+        </div>
+    </header>
+
     <div class="container">
         <h2>Criar Checklist</h2>
         <form method="POST" action="">
@@ -166,6 +245,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <a class="voltar" href="dashboard.php">⬅ Voltar</a>
     </div>
+
+    <footer>
+        &copy; <?php echo date('Y'); ?> Sistema de Auditoria. Todos os direitos reservados.
+        <br>Desenvolvido por: Arthur Rodrigues, Jean Inácio, João Gabriel e Stefany Carlos.
+    </footer>
 </body>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>

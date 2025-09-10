@@ -73,18 +73,6 @@ if (isset($_SESSION['success_message'])) {
             flex-direction: column;
         }
 
-        .header {
-            background: #0077cc;
-            color: white;
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            position: relative;
-            height: 72.5px;
-            box-sizing: border-box;
-        }
-
         .header h1 {
             position: absolute;
             left: 50%;
@@ -95,12 +83,28 @@ if (isset($_SESSION['success_message'])) {
             text-align: center;
         }
 
+        .header {
+            background: #0077cc;
+            color: white;
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 72.5px;
+            box-sizing: border-box;
+            z-index: 1000;
+        }
+
         .main {
             flex: 1;
             display: flex;
             justify-content: center;
             align-items: center;
-            margin-bottom: 90px;
+            margin-bottom: 15px;
             box-sizing: border-box;
         }
 
