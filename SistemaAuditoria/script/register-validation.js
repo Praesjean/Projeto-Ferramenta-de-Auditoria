@@ -116,7 +116,7 @@ function errorAlert(message, input) {
     text: message,
     icon: 'error',
     confirmButtonText: 'Entendido',
-    confirmButtonColor: '#081369ff',
+    confirmButtonColor: '#929292ff',
     timer: 7000,
     timerProgressBar: true
   }).then(() => {

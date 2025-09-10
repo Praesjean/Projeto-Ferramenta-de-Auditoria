@@ -78,7 +78,6 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             height: 100vh;
             margin: 0;
         }
-
         .container {
             display: flex;
             flex-direction: column;
@@ -89,7 +88,10 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
             width: 450px;
             box-sizing: border-box;
-    
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
         }
         h2 {
             text-align: center;
