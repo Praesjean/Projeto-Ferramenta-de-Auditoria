@@ -33,26 +33,83 @@ $resultado = $stmt->get_result();
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Gerenciar Checklists</title>
+    <title>Sistema de Auditoria | Gerenciar Checklists</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            padding: 20px;
+            background: #f0f4f7;
+            margin: 0;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            padding-top: 20px;
+            padding-bottom: 100px;
         }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 30px;
+            background: #0077cc;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .header .user-info p {
+            margin: 2px 0;
+            font-weight: normal;
+            font-size: 16px;
+        }
+
+        .header h1 {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .header .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .header .logout-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+
         .container {
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
-            max-width: 800px;
-            margin: auto;
+            min-width: 700px;
+            max-width: 700px;
+            margin: 120px auto 80px auto;
         }
+
         h2 {
             text-align: center;
         }
+
         table {
             width: 100%;
+            max-width: 100%;
             border-collapse: separate;
             border-spacing: 0;
             margin-top: 15px;
@@ -67,6 +124,9 @@ $resultado = $stmt->get_result();
             padding: 10px;
             text-align: center;
             font-size: 16px;
+            word-break: break-word;
+            overflow-wrap: break-word;
+            max-width: 200px;
         }
 
         th {
@@ -89,6 +149,22 @@ $resultado = $stmt->get_result();
         tr:last-child td:last-child {
             border-bottom-right-radius: 12px;
         }
+
+        .table-wrapper {
+            overflow-x: auto;
+        }
+
+        td.texto {
+            word-break: break-word;
+            overflow-wrap: break-word;
+            max-width: 200px;
+        }
+
+        td.acoes {
+            max-width: none;
+            white-space: nowrap;
+        }
+
         a {
             text-decoration: none;
             padding: 6px 10px;
@@ -107,15 +183,13 @@ $resultado = $stmt->get_result();
             background: #e0a800;
             transform: scale(1.05);
             transition: 0.2s;
-            font-size: 16px;
         }
-
         a.excluir:hover {
             background: #c82333;
             transform: scale(1.05);
             transition: 0.2s;
-            font-size: 16px;
         }
+
         .voltar {
             display: block;
             width: fit-content;
@@ -134,6 +208,7 @@ $resultado = $stmt->get_result();
             background: #979797ff;
             transform: scale(1.05);
         }
+
         .mensagem {
             text-align: center;
             margin: 10px 0;
@@ -147,39 +222,72 @@ $resultado = $stmt->get_result();
             font-size: 16px;
             color: #555;
         }
+
+        footer {
+            background: #0077cc;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            line-height: 1.5em;
+        }
     </style>
 </head>
 <body>
+    <header class="header">
+        <div class="user-info">
+            <p>Nome: <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></p>
+            <p>E-mail: <?php echo htmlspecialchars($_SESSION['usuario_email']); ?></p>
+        </div>
+
+        <h1>Sistema de Auditoria</h1>
+
+        <div>
+            <a href="logout.php" class="logout-btn">Sair</a>
+        </div>
+    </header>
+
     <div class="container">
         <h2>Gerenciar Checklists</h2>
 
         <?php if ($resultado->num_rows > 0) { ?>
-            <table>
-                <tr>
-                    <th>Título</th>
-                    <th>Auditor</th>
-                    <th>Criado em</th>
-                    <th>Ações</th>
-                </tr>
-                <?php while ($row = $resultado->fetch_assoc()) { ?>
+            <div class="table-wrapper">
+                <table>
                     <tr>
-                        <td><?php echo htmlspecialchars($row['titulo']); ?></td>
-                        <td><?php echo htmlspecialchars($row['auditor']); ?></td>
-                        <td><?php echo $row['criado_em']; ?></td>
-                        <td>
-                            <a class="editar" href="editar_checklist.php?id=<?php echo $row['id']; ?>">Editar</a>
-                            <a class="excluir" href="#" onclick="confirmarExclusao(<?php echo $row['id']; ?>)">Excluir</a>
-                        </td>
+                        <th>Título</th>
+                        <th>Auditor</th>
+                        <th>Criado em</th>
+                        <th>Ações</th>
                     </tr>
-                <?php } ?>
-            </table>
+                    <?php while ($row = $resultado->fetch_assoc()) { ?>
+                        <tr>
+                            <td class="texto"><?php echo htmlspecialchars($row['titulo']); ?></td>
+                            <td class="texto"><?php echo htmlspecialchars($row['auditor']); ?></td>
+                            <td class="texto"><?php echo $row['criado_em']; ?></td>
+                            <td class="acoes">
+                                <a class="editar" href="editar_checklist.php?id=<?php echo $row['id']; ?>">Editar</a>
+                                <a class="excluir" href="#" onclick="confirmarExclusao(<?php echo $row['id']; ?>)">Excluir</a>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            </div>
         <?php } else { ?>
             <p class="sem-checklist">Nenhum checklist cadastrado até o momento.</p>
         <?php } ?>
 
         <a class="voltar" href="dashboard.php">⬅ Voltar</a>
     </div>
-</body>
+
+    <footer>
+        &copy; <?php echo date('Y'); ?> Sistema de Auditoria. Todos os direitos reservados.
+        <br>Desenvolvido por: Arthur Rodrigues, Jean Inácio, João Gabriel e Stefany Carlos.
+    </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <script>
@@ -200,6 +308,7 @@ function confirmarExclusao(id) {
     });
 }
 </script>
+
 <script>
 <?php if ($mensagem): ?>
 Swal.fire({
@@ -222,5 +331,5 @@ Swal.fire({
     font-weight: normal !important;
 }
 </style>
-
+</body>
 </html>

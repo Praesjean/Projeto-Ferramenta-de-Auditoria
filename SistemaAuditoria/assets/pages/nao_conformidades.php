@@ -43,7 +43,7 @@ $nc_list = $stmt->get_result();
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Não Conformidades</title>
+    <title>Sistema de Auditoria | Não Conformidades</title>
     <style>
         body {
             font-family: Arial, sans-serif;

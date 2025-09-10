@@ -62,31 +62,88 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Realizar Auditoria</title>
+    <title>Sistema de Auditoria | Realizar Auditoria</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             background: #f4f6f8;
-            padding: 20px;
+            margin: 0;
+            padding-top: 80px;
+            padding-bottom: 80px;
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
         }
+
+        .header {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            z-index: 1000;
+            padding: 15px 30px;
+            background: #0077cc;
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-sizing: border-box;
+        }
+
+        .header .user-info p {
+            margin: 2px 0;
+            font-weight: normal;
+            font-size: 16px;
+        }
+
+        .header h1 {
+            position: absolute;
+            left: 50%;
+            transform: translateX(-50%);
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+            text-align: center;
+        }
+
+        .header .logout-btn {
+            background: #e74c3c;
+            color: white;
+            padding: 8px 16px;
+            text-decoration: none;
+            border-radius: 6px;
+            font-weight: bold;
+            transition: background 0.3s, transform 0.2s;
+        }
+
+        .header .logout-btn:hover {
+            background: #c0392b;
+            transform: scale(1.05);
+        }
+
         .container {
             background: white;
             padding: 20px;
             border-radius: 8px;
             box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
-            max-width: 800px;
-            margin: auto;
+            min-width: 600px;
+            max-width: 600px;
+            margin: 50px auto 40px auto;
             box-sizing: border-box;
         }
+
         h2 {
             text-align: center;
         }
+
         .mensagem {
             text-align: center;
             margin: 10px 0;
             color: green;
             font-size: 16px;
         }
+
         .voltar {
             display: block;
             width: fit-content;
@@ -100,24 +157,29 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
             transition: background 0.3s, transform 0.2s;
             font-size: 16px;
         }
+
         .voltar:hover {
             background: #979797ff;
             transform: scale(1.05);
         }
+
         label, select, button {
             font-size: 16px;
         }
 
-        select, button {
+        select {
             width: 100%;
-            max-width: 300px;
+            max-width: 100%;
             padding: 8px;
             margin: 8px 0;
             border-radius: 5px;
             border: 1px solid #ccc;
             box-sizing: border-box;
             cursor: pointer;
+            overflow: hidden;
+            text-overflow: ellipsis;
         }
+
         button {
             background: #28a745;
             color: white;
@@ -129,13 +191,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
             background: #218838;
             transform: scale(1.03);
         }
+
+        .table-wrapper {
+            overflow-x: auto;
+            margin-top: 15px;
+        }
+
         table {
             width: 100%;
+            max-width: 100%;
             border-collapse: collapse;
-            margin-top: 15px;
+            font-size: 16px;
             border-radius: 10px;
             overflow: hidden;
-            font-size: 16px;
         }
 
         th, td {
@@ -150,6 +218,16 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
             color: white;
         }
 
+        td.texto {
+            word-break: break-word;
+            overflow-wrap: break-word;
+            max-width: 300px;
+        }
+
+        td.acoes {
+            white-space: nowrap;
+        }
+
         button[type="submit"] {
             display: block;
             margin: 20px auto 0 auto;
@@ -159,9 +237,18 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
             cursor: pointer;
         }
 
-        button[type="submit"]:hover {
-            background: #218838;
-            transform: scale(1.03);
+        footer {
+            background: #0077cc;
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            box-sizing: border-box;
+            font-size: 16px;
+            line-height: 1.5em;
         }
     </style>
     <script>
@@ -174,6 +261,19 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
     </script>
 </head>
 <body>
+    <header class="header">
+        <div class="user-info">
+            <p>Nome: <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></p>
+            <p>E-mail: <?php echo htmlspecialchars($_SESSION['usuario_email']); ?></p>
+        </div>
+
+        <h1>Sistema de Auditoria</h1>
+
+        <div>
+            <a href="logout.php" class="logout-btn">Sair</a>
+        </div>
+    </header>
+
     <div class="container">
         <h2>Realizar Auditoria</h2>
 
@@ -191,7 +291,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
         </form>
 
         <?php
-        if (isset($_GET['checklist_id'])) {
+        if (isset($_GET['checklist_id'])):
             $checklist_id = intval($_GET['checklist_id']);
             $sqlItens = "SELECT * FROM checklist_itens WHERE checklist_id = ?";
             $stmtItens = $conn->prepare($sqlItens);
@@ -199,36 +299,44 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
             $stmtItens->execute();
             $itens = $stmtItens->get_result();
 
-            if ($itens->num_rows > 0) {
-                echo '<form method="POST" action="">';
-                echo '<input type="hidden" name="checklist_id" value="'.$checklist_id.'">';
-                echo '<table>';
-                echo '<tr><th>Item</th><th>Resposta</th></tr>';
-                while ($item = $itens->fetch_assoc()) {
-                    echo '<tr>';
-                    echo '<td>'.htmlspecialchars($item['descricao']).'</td>';
-                    echo '<td>
-                            <select name="respostas['.$item['id'].']" required>
-                                <option value="">-- Selecione --</option>
-                                <option value="SIM">SIM</option>
-                                <option value="NAO">NÃO</option>
-                                <option value="NA">N/A</option>
-                            </select>
-                          </td>';
-                    echo '</tr>';
-                }
-                echo '</table>';
-                echo '<button type="submit">Concluir Auditoria</button>';
-                echo '</form>';
-            } else {
+            if ($itens->num_rows > 0):
+        ?>
+                <form method="POST" action="">
+                    <input type="hidden" name="checklist_id" value="<?php echo $checklist_id; ?>">
+                    <div class="table-wrapper">
+                        <table>
+                            <tr><th>Item</th><th>Resposta</th></tr>
+                            <?php while ($item = $itens->fetch_assoc()): ?>
+                                <tr>
+                                    <td class="texto"><?php echo htmlspecialchars($item['descricao']); ?></td>
+                                    <td>
+                                        <select name="respostas[<?php echo $item['id']; ?>]" required>
+                                            <option value="">-- Selecione --</option>
+                                            <option value="SIM">SIM</option>
+                                            <option value="NAO">NÃO</option>
+                                            <option value="NA">N/A</option>
+                                        </select>
+                                    </td>
+                                </tr>
+                            <?php endwhile; ?>
+                        </table>
+                    </div>
+                    <button type="submit">Concluir Auditoria</button>
+                </form>
+        <?php
+            else:
                 echo "<p>Nenhum item encontrado neste checklist.</p>";
-            }
-        }
+            endif;
+        endif;
         ?>
 
         <a class="voltar" href="dashboard.php">⬅ Voltar</a>
     </div>
-</body>
+
+    <footer>
+        &copy; <?php echo date('Y'); ?> Sistema de Auditoria. Todos os direitos reservados.
+        <br>Desenvolvido por: Arthur Rodrigues, Jean Inácio, João Gabriel e Stefany Carlos.
+    </footer>
 
 <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
 <?php if (!is_null($resultado_final)): ?>
@@ -251,5 +359,5 @@ Swal.fire({
 });
 </script>
 <?php endif; ?>
-
+</body>
 </html>

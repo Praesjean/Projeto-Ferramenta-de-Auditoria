@@ -67,7 +67,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro de Usuário</title>
+    <title>Sistema de Auditoria | Cadastro de Usuário</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -77,25 +77,27 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             flex-direction: column;
             min-height: 100vh;
         }
-        header h1 {
-            margin: 0;
-            font-size: 24px;
-            font-weight: bold;
-        }
+
         header {
             background: #0077cc;
             color: white;
-            padding: 15px 30px;
-            text-align: center;
-            padding-top: 22px;
-            padding-bottom: 23.5px;
             position: fixed;
             top: 0;
             left: 0;
             width: 100%;
             z-index: 1000;
+            padding: 22.7px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            box-sizing: border-box;
         }
 
+        header h1 {
+            margin: 0;
+            font-size: 24px;
+            font-weight: bold;
+        }
         main {
             flex: 1;
             display: flex;

@@ -48,7 +48,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Criar Checklist</title>
+    <title>Sistema de Auditoria | Criar Checklist</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -184,7 +184,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             background: #6f42c1;
             font-size: 16px;
         }
-        .add-template-btn {
+        .add-template-btn:hover {
             background: #5a369dff;
         }
         .error-msg {
