@@ -1,64 +1,146 @@
 <?php
 session_start();
-include '../../conecta_db.php';
+include('../../conecta_db.php');
 
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit;
 }
 
-if (!isset($_POST['nc_id'])) {
-    die("Não foi informado qual NC enviar.");
+$usuario_id = $_SESSION['usuario_id'];
+$usuario_nome = $_SESSION['usuario_nome'];
+$msg = "";
+
+require 'phpmailer/PHPMailer.php';
+require 'phpmailer/SMTP.php';
+require 'phpmailer/Exception.php';
+
+use PHPMailer\PHPMailer\PHPMailer;
+use PHPMailer\PHPMailer\Exception;
+
+if (!isset($_GET['nc_id'])) {
+    die("Não foi especificada a não conformidade.");
 }
 
-$nc_id = intval($_POST['nc_id']);
+$nc_id = intval($_GET['nc_id']);
 
-$sql = "SELECT nc.id, nc.descricao, nc.criado_em, nc.status, 
-               a.resultado, a.realizado_em, c.titulo AS projeto, 
-               u.nome AS responsavel, c.auditor AS rqa_responsavel
+$sql = "SELECT nc.id AS nc_id,
+               nc.descricao AS nc_descricao,
+               nc.criado_em AS nc_criado,
+               ci.descricao AS item_descricao,
+               c.titulo AS checklist_titulo,
+               a.id AS auditoria_id,
+               u_responsavel.nome AS responsavel_nome,
+               u_responsavel.email AS responsavel_email,
+               c.auditor AS auditor_nome
         FROM nao_conformidades nc
         JOIN auditorias a ON nc.auditoria_id = a.id
+        JOIN checklist_itens ci ON nc.item_id = ci.id
         JOIN checklists c ON a.checklist_id = c.id
-        JOIN usuarios u ON a.usuario_id = u.id
+        JOIN usuarios u_responsavel ON a.usuario_id = u_responsavel.id
         WHERE nc.id = ?";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $nc_id);
 $stmt->execute();
-$nc = $stmt->get_result()->fetch_assoc();
+$result = $stmt->get_result();
 
-if (!$nc) die("Não conformidade não encontrada.");
-
-$to = "destinatario@empresa.com";
-$subject = "Solicitação de Resolução de Não Conformidade";
-$message = "
-Solicitação de Resolução de Não Conformidade
-Código de Controle: {$nc['id']} - {$nc['descricao']}
-Projeto: {$nc['projeto']}
-Responsável: {$nc['responsavel']}
-Data de Solicitação: ".date("d/m/Y", strtotime($nc['criado_em']))."
-Prazo de Resolução: ".date("d/m/Y", strtotime($nc['criado_em']." +3 days"))."
-Data da Solução: 
-RQA Responsável: {$nc['rqa_responsavel']}
-Você tem 24 horas úteis para contestação
-Descrição:
-{$nc['descricao']}
-Classificação
-Média-Simples | 3 Dias
-Ação Corretiva Indicada
-CM | Corrigir itens conforme padrão
-Histórico de Escalonamento
-Superior Responsável
-Prazo para Resolução
-";
-
-$headers = "From: sistema@auditoria.com\r\n";
-$headers .= "Content-Type: text/plain; charset=UTF-8\r\n";
-
-if(mail($to, $subject, $message, $headers)) {
-    echo "✅ E-mail enviado com sucesso!";
-} else {
-    echo "❌ Falha ao enviar e-mail.";
+if ($result->num_rows === 0) {
+    die("Não conformidade não encontrada.");
 }
 
-echo "<br><a href='nao_conformidades.php'>⬅ Voltar</a>";
+$nc = $result->fetch_assoc();
+
+$mensagem_template = "Solicitação de Resolução de Não Conformidade\n";
+$mensagem_template .= "----------------------------------------\n";
+$mensagem_template .= "Código de Controle: {$nc['nc_id']} - {$nc['item_descricao']}\n";
+$mensagem_template .= "Checklist: {$nc['checklist_titulo']}\n";
+$mensagem_template .= "Projeto: {$nc['checklist_titulo']}\n";
+$mensagem_template .= "Responsável: {$nc['responsavel_nome']}\n";
+$mensagem_template .= "Data de Solicitação: ".date("d/m/Y", strtotime($nc['nc_criado']))."\n";
+$mensagem_template .= "Prazo de Resolução: ".date("d/m/Y", strtotime("+3 days"))."\n";
+$mensagem_template .= "RQA Responsável: {$nc['auditor_nome']}\n";
+$mensagem_template .= "----------------------------------------\n";
+$mensagem_template .= "Descrição:\n{$nc['nc_descricao']}\n";
+$mensagem_template .= "Classificação: Média-Simples | 3 Dias\n";
+$mensagem_template .= "Ação Corretiva Indicada: CM | Corrigir itens conforme regras\n";
+
+if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
+    $destinatario = trim($_POST['destinatario']);
+    $assunto = trim($_POST['assunto']);
+    $mensagem_editada = trim($_POST['mensagem']);
+
+    if (!empty($destinatario) && !empty($assunto) && !empty($mensagem_editada)) {
+        $mail = new PHPMailer(true);
+
+        try {
+            $mail->isSMTP();
+            $mail->Host       = 'smtp.gmail.com';
+            $mail->SMTPAuth   = true;
+            $mail->Username   = 'petmap0328@gmail.com';
+            $mail->Password   = 'ylqq oeep crzl nkuu';
+            $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
+            $mail->Port       = 587;
+
+            $mail->setFrom('naoconformidades@sistema.com.br', "$usuario_nome (Sistema de Auditoria)");
+            $mail->addAddress($destinatario);
+
+            $mensagem_html = nl2br(htmlspecialchars($mensagem_editada));
+
+            $mail->isHTML(true);
+            $mail->Subject = $assunto;
+            $mail->Body    = "<div style='font-family:Arial,sans-serif; line-height:1.5;'>$mensagem_html</div>";
+            $mail->AltBody = strip_tags($mensagem_editada);
+
+            $mail->send();
+            $msg = "✅ E-mail enviado para $destinatario!";
+        } catch (Exception $e) {
+            $msg = "❌ Erro ao enviar e-mail: {$mail->ErrorInfo}";
+        }
+    } else {
+        $msg = "⚠️ Preencha todos os campos.";
+    }
+}
 ?>
+
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <title>Enviar E-mail</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f4f6f8; padding: 20px; }
+        .container { background: white; padding: 20px; border-radius: 10px; max-width: 700px; margin: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
+        h2 { text-align: center; }
+        label { display: block; margin-top: 10px; font-weight: bold; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
+        textarea { height: 250px; resize: vertical; }
+        button { margin-top: 15px; padding: 10px 20px; background: #0077cc; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; transition: background 0.3s; }
+        button:hover { background: #005fa3; }
+        .msg { text-align: center; margin: 15px 0; font-weight: bold; }
+        .voltar { display: block; text-align: center; margin-top: 15px; text-decoration: none; color: black; background: #ccc; padding: 8px 16px; border-radius: 6px; }
+        .voltar:hover { background: #999; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Enviar E-mail</h2>
+
+        <?php if ($msg) echo "<p class='msg'>$msg</p>"; ?>
+
+        <form method="POST">
+            <label>Destinatário</label>
+            <input type="email" name="destinatario" placeholder="exemplo@gmail.com" value="<?php echo htmlspecialchars($nc['responsavel_email']); ?>" required>
+
+            <label>Assunto</label>
+            <input type="text" name="assunto" placeholder="Digite o assunto" value="Solicitação de Resolução de Não Conformidade - NC <?php echo $nc['nc_id']; ?>" required>
+
+            <label>Mensagem</label>
+            <textarea name="mensagem"><?php echo htmlspecialchars($mensagem_template); ?></textarea>
+
+            <button type="submit" name="enviar_email">Enviar</button>
+        </form>
+
+        <a class="voltar" href="nao_conformidades.php">⬅ Voltar</a>
+    </div>
+</body>
+</html>

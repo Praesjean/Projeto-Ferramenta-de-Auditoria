@@ -174,10 +174,7 @@ $nc_list = $stmt->get_result();
                             </form>
                         </td>
                         <td>
-                            <form method="POST" action="enviar_nc.php">
-                                <input type="hidden" name="nc_id" value="<?php echo $nc['nc_id']; ?>">
-                                <button type="submit" class="enviar-btn">Enviar por e-mail</button>
-                            </form>
+                            <a href="enviar_nc.php?nc_id=<?php echo $nc['nc_id']; ?>" class="enviar-btn">Enviar por e-mail</a>
                         </td>
                     </tr>
                 <?php } ?>
