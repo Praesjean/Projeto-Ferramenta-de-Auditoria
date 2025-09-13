@@ -2,7 +2,6 @@
 session_start();
 include('../../conecta_db.php');
 
-
 if (!isset($_SESSION['usuario_id'])) {
     header("Location: login.php");
     exit;
@@ -61,7 +60,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    $mensagem = "✅ Checklist atualizado com sucesso!";
+    $mensagem = "Checklist atualizado com sucesso!";
 }
 ?>
 
@@ -69,97 +68,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Editar Checklist</title>
-    <style>
-        body { font-family: Arial; background: #f4f6f8; padding: 20px; }
-        .container { 
-            background: white; 
-            padding: 20px; 
-            border-radius: 8px; 
-            max-width: 600px; 
-            margin:auto; 
-            box-shadow:0 2px 8px rgba(0,0,0,0.2); 
-            box-sizing: border-box;
-        }
-
-        input, textarea { 
-            width: 100%; 
-            padding: 10px; 
-            margin:5px 0; 
-            border:1px solid #ccc; 
-            border-radius:5px; 
-            box-sizing: border-box;
-            font-size: 16px;
-        }
-
-        button { 
-            padding:10px 15px; 
-            background:#0077cc; 
-            color:white; 
-            border:none; 
-            border-radius:5px; 
-            cursor:pointer; 
-            transition: 0.2s;
-            font-size: 16px;
-        }
-
-        button:hover { 
-            background:#005fa3; 
-        }
-
-        .add-btn { 
-            background:#28a745; 
-            margin-top:5px; 
-            font-size: 16px;
-        }
-
-        .add-btn:hover { 
-            background:#218838; 
-        }
-
-        .mensagem { 
-            color:green; 
-            text-align:center; 
-            margin-bottom:10px;
-            font-size: 16px;
-        }
-
-        h2 { 
-            text-align:center; 
-        }
-
-        .voltar {
-            display: block;
-            width: fit-content;
-            margin: 20px auto 0 auto;
-            text-align: center;
-            text-decoration: none;
-            color: black;
-            background: #bababaff;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: background 0.3s, transform 0.2s;
-            font-size: 16px;
-        }
-
-        .voltar:hover {
-            background: #979797ff;
-            transform: scale(1.05);
-        }
-    </style>
-    <script>
-        function adicionarItem() {
-            let div = document.createElement("div");
-            div.innerHTML = '<input type="text" name="itens[]" placeholder="Descrição do item" required>';
-            document.getElementById("itens").appendChild(div);
-        }
-    </script>
+    <title>Sistema de Auditoria | Editar Checklist</title>
+    <link href="../../styles/pages/editar_checklist/editar_checklist.css" rel="stylesheet">
 </head>
 <body>
+    <header class="header">
+        <div class="user-info">
+            <p>Nome: <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></p>
+            <p>E-mail: <?php echo htmlspecialchars($_SESSION['usuario_email']); ?></p>
+        </div>
+        <h1>Sistema de Auditoria</h1>
+        <div><a href="logout.php" class="logout-btn">Sair</a></div>
+    </header>
+
     <div class="container">
         <h2>Editar Checklist</h2>
-
-        <?php if($mensagem) echo "<p class='mensagem'>$mensagem</p>"; ?>
 
         <form method="POST" action="">
             <label>Título:</label>
@@ -185,5 +108,25 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <a class="voltar" href="gerenciar_checklists.php">⬅ Voltar</a>
     </div>
+
+    <footer>
+        &copy; <?php echo date('Y'); ?> Sistema de Auditoria. Todos os direitos reservados.
+        <br>Desenvolvido por: Arthur Rodrigues, Jean Inácio, João Gabriel e Stefany Carlos.
+    </footer>
 </body>
+
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="../../script/edit-checklist.js"></script>
+
+<?php if($mensagem): ?>
+<script>
+Swal.fire({
+    icon: 'success',
+    title: 'Checklist atualizado!',
+    text: '<?php echo $mensagem; ?>',
+    confirmButtonColor: '#28a745'
+});
+</script>
+<?php endif; ?>
+
 </html>

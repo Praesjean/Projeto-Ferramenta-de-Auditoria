@@ -67,116 +67,46 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Cadastro de Usuário</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            margin: 0;
-        }
-        .container {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            background: white;
-            padding: 20px;
-            border-radius: 8px;
-            box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
-            width: 450px;
-            box-sizing: border-box;
-            position: fixed;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-        }
-        h2 {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        form{
-            width:100%;
-        }
-        label{
-            margin: 50px auto;
-        }
-        input[type=text],
-        input[type=email],
-        input[type=password],
-        .register-btn {
-            display: block;
-            width: 100%;
-            padding: 10px;
-            margin: 6px auto;
-            margin-bottom: 15px;
-            border: 1px solid #ccc;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        .register-btn {
-            background: #0077cc;
-            border: none;
-            color: white;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s;
-        }
-        .register-btn:hover {
-            background: #005fa3;
-        }
-         p {
-            text-align:center;
-            margin-top:10px;
-        }
-        p a {
-            color: #0077cc;
-            text-decoration: none;
-            font-weight: bold;
-            transition: color 0.3s;
-        }
-        p a:hover {
-            color: #005fa3;
-            text-decoration: underline;
-        }
-        .span-required {
-            display: none;
-            font-size: 12px;
-            color: #e63636;
-            text-align: left;
-            width: 90%;
-        }
-    </style>
+    <title>Sistema de Auditoria | Cadastro de Usuário</title>
+    <link href="../../styles/pages/cadastro/cadastro.css" rel="stylesheet">
 </head>
-
 <body>
-    <div class="container">
-        <h2>Cadastrar Usuário</h2>
+    <header>
+        <h1>Sistema de Auditoria</h1>
+    </header>
+    
+    <main>
+        <div class="container">
+            <h2>Cadastrar Usuário</h2>
 
-        <form id="form" name="form" method="POST" action="cadastro.php">
-            <label for="name"><b>Nome: *</b></label>
-            <input type="text" id="name" name="nome" class="full-inputUser required" data-type="nome" data-required="true" placeholder="Insira seu nome completo">
-            <span class="span-required">Nome não pode conter números e caracteres especiais.</span>
+            <form id="form" name="form" method="POST" action="cadastro.php">
+                <label for="name"><b>Nome: *</b></label>
+                <input type="text" id="name" name="nome" class="full-inputUser required" data-type="nome" data-required="true" placeholder="Insira seu nome completo">
+                <span class="span-required">Nome não pode conter números e caracteres especiais.</span>
 
-            <label for="text"><b>E-mail: *</b></label>
-            <input type="text" id="email" name="email" class="full-inputUser required" data-type="email" data-required="true" placeholder="exemplo@gmail.com">
-            <span class="span-required">Insira um e-mail válido!</span>
+                <label for="text"><b>E-mail: *</b></label>
+                <input type="text" id="email" name="email" class="full-inputUser required" data-type="email" data-required="true" placeholder="exemplo@gmail.com">
+                <span class="span-required">Insira um e-mail válido!</span>
 
-            <label for="password"><b>Senha: *</b></label>
-            <input type="password" name="senha" id="password" class="full-inputUser required" data-type="senha" data-required="true" placeholder="Crie uma senha">
-            <span class="span-required">Sua senha deve conter no mínimo 8 caracteres.</span>
+                <label for="password"><b>Senha: *</b></label>
+                <input type="password" name="senha" id="password" class="full-inputUser required" data-type="senha" data-required="true" placeholder="Crie uma senha">
+                <span class="span-required">Sua senha deve conter no mínimo 8 caracteres.</span>
 
-            <label for="confirm-pass"><b>Confirme sua senha: *</b></label>
-            <input type="password" name="confirmar_senha" id="confirm-pass" class="full-inputUser required" data-type="confirmar senha" data-required="true" placeholder="Repita a senha">
-            <span class="span-required">As senhas não coincidem.</span>
-        
-            <input type="submit" value="Cadastrar-se" id="submit" class="register-btn" onclick="btnRegisterOnClick(event, this.form)">
-        </form>
+                <label for="confirm-pass"><b>Confirme sua senha: *</b></label>
+                <input type="password" name="confirmar_senha" id="confirm-pass" class="full-inputUser required" data-type="confirmar senha" data-required="true" placeholder="Repita a senha">
+                <span class="span-required">As senhas não coincidem.</span>
+            
+                <input type="submit" value="Cadastrar-se" id="submit" class="register-btn" onclick="btnRegisterOnClick(event, this.form)">
+            </form>
 
-        <p>Já tem conta? <a href="login.php">Login</a></p>
-    </div>
+            <p>Já tem conta? <a href="login.php">Login</a></p>
+        </div>
+    </main>
+
+    <footer>
+        &copy; <?php echo date('Y'); ?> Sistema de Auditoria. Todos os direitos reservados.
+        <br>Desenvolvido por: Arthur Rodrigues, Jean Inácio, João Gabriel e Stefany Carlos.
+    </footer>
 </body>
 
     <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
