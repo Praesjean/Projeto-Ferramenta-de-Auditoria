@@ -12,7 +12,8 @@ CREATE TABLE usuarios (
 CREATE TABLE checklists (
     id INT AUTO_INCREMENT PRIMARY KEY,
     titulo VARCHAR(200) NOT NULL,
-    descricao TEXT,
+    descricao TEXT NOT NULL,
+    autor_documento VARCHAR(100) NOT NULL,
     auditor VARCHAR(100) NOT NULL,
     usuario_id INT,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,

@@ -38,13 +38,13 @@ $itens = $stmtItens->get_result();
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titulo = $_POST['titulo'];
     $descricao = $_POST['descricao'];
+    $autor_documento = $_POST['autor_documento'];
     $auditor = $_POST['auditor'];
     $novos_itens = $_POST['itens'];
 
-    $sqlUpd = "UPDATE checklists SET titulo=?, descricao=?, auditor=? WHERE id=? AND usuario_id=?";
+    $sqlUpd = "UPDATE checklists SET titulo=?, descricao=?, autor_documento=?, auditor=? WHERE id=? AND usuario_id=?";
     $stmtUpd = $conn->prepare($sqlUpd);
-    $stmtUpd->bind_param("sssii", $titulo, $descricao, $auditor, $checklist_id, $usuario_id);
-    $stmtUpd->execute();
+    $stmtUpd->bind_param("ssssii", $titulo, $descricao, $autor_documento, $auditor, $checklist_id, $usuario_id);
 
     $sqlDelItens = "DELETE FROM checklist_itens WHERE checklist_id=?";
     $stmtDel = $conn->prepare($sqlDelItens);
@@ -91,10 +91,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label>Descrição:</label>
             <textarea name="descricao"><?php echo htmlspecialchars($checklist['descricao']); ?></textarea>
 
-            <label>Auditor:</label>
+            <label>Autor do Documento:</label>
+            <input type="text" name="autor_documento" value="<?php echo htmlspecialchars($checklist['autor_documento']); ?>" required>
+
+            <label>Auditor Responsável:</label>
             <input type="text" name="auditor" value="<?php echo htmlspecialchars($checklist['auditor']); ?>" required>
 
-            <h3>Itens</h3>
+            <h3>Itens do Checklist</h3>
             <div id="itens">
                 <?php while($item = $itens->fetch_assoc()) { ?>
                     <input type="text" name="itens[]" value="<?php echo htmlspecialchars($item['descricao']); ?>" required>

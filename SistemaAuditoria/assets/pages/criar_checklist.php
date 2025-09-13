@@ -12,14 +12,15 @@ $mensagem = "";
 if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $titulo = trim($_POST['titulo']);
     $descricao = trim($_POST['descricao']);
+    $autor_documento = trim($_POST['autor_documento']);
     $auditor = trim($_POST['auditor']);
     $itens = $_POST['itens'];
     $usuario_id = $_SESSION['usuario_id'];
 
-    if (!empty($titulo) && !empty($auditor) && !empty($itens)) {
-        $sql = "INSERT INTO checklists (titulo, descricao, auditor, usuario_id) VALUES (?, ?, ?, ?)";
+    if (!empty($titulo) && !empty($descricao) && !empty($autor_documento) && !empty($auditor) && !empty($itens)) {
+        $sql = "INSERT INTO checklists (titulo, descricao, autor_documento, auditor, usuario_id) VALUES (?, ?, ?, ?, ?)";
         $stmt = $conn->prepare($sql);
-        $stmt->bind_param("sssi", $titulo, $descricao, $auditor, $usuario_id);
+        $stmt->bind_param("ssssi", $titulo, $descricao, $autor_documento, $auditor, $usuario_id);
 
         if ($stmt->execute()) {
             $checklist_id = $stmt->insert_id;
@@ -74,11 +75,11 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <label>Descrição:</label>
             <textarea name="descricao" rows="3"></textarea>
 
+            <label>Autor do Documento:</label>
+            <input type="text" name="autor_documento">
+
             <label>Auditor Responsável:</label>
             <input type="text" name="auditor">
-
-            <label>Autor do Documento:</label>
-            <input type="text" name="autor">
 
             <h3>Itens do Checklist</h3>
             <div id="itens"></div>

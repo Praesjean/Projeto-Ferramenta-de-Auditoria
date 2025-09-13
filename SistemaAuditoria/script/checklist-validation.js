@@ -11,6 +11,8 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const titulo = form.querySelector("input[name='titulo']");
         const auditor = form.querySelector("input[name='auditor']");
+        const autor = form.querySelector("input[name='autor']");
+        const descricao = form.querySelector("textarea[name='descricao']");
         const itens = [...form.querySelectorAll("input[name='itens[]']")];
 
         if (titulo.value.trim() === "") {
@@ -29,13 +31,35 @@ document.addEventListener("DOMContentLoaded", () => {
             removeError(auditor);
         }
 
-        const emptyItem = itens.find(i => i.value.trim() === "");
-        if (emptyItem) {
+        if (autor.value.trim() === "") {
             e.preventDefault();
-            setError(emptyItem, "Preencha todos os itens do checklist.");
+            setError(autor, "O campo Autor do Documento é obrigatório.");
             valid = false;
         } else {
-            itens.forEach(i => reoveError(i));
+            removeError(autor);
+        }
+
+        if (descricao.value.trim() === "") {
+            e.preventDefault();
+            setError(descricao, "O campo Descrição é obrigatório.");
+            valid = false;
+        } else {
+            removeError(descricao);
+        }
+
+        let hasEmptyItem = false;
+        itens.forEach((i) => {
+            if (i.value.trim() === "") {
+                setError(i, "Preencha todos os itens do checklist.");
+                hasEmptyItem = true;
+            } else {
+                removeError(i);
+            }
+        });
+
+        if (hasEmptyItem) {
+            e.preventDefault();
+            valid = false;
         }
 
         return valid;

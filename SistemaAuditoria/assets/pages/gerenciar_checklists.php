@@ -35,6 +35,7 @@ $resultado = $stmt->get_result();
     <meta charset="UTF-8">
     <title>Sistema de Auditoria | Gerenciar Checklists</title>
     <link href="../../styles/pages/gerenciar_checklists/gerenciar_checklists.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
@@ -66,10 +67,14 @@ $resultado = $stmt->get_result();
                         <tr>
                             <td class="texto"><?php echo htmlspecialchars($row['titulo']); ?></td>
                             <td class="texto"><?php echo htmlspecialchars($row['auditor']); ?></td>
-                            <td class="texto"><?php echo $row['criado_em']; ?></td>
+                            <td class="texto"><?php echo date("d/m/Y H:i:s", strtotime($row['criado_em'])); ?></td>
                             <td class="acoes">
-                                <a class="editar" href="editar_checklist.php?id=<?php echo $row['id']; ?>">Editar</a>
-                                <a class="excluir" href="#" onclick="confirmarExclusao(<?php echo $row['id']; ?>)">Excluir</a>
+                                <a class="editar" title="Editar" href="editar_checklist.php?id=<?php echo $row['id']; ?>">
+                                    <i class="fas fa-pen"></i>
+                                </a>
+                                <a class="excluir" title="Excluir" href="#" onclick="confirmarExclusao(<?php echo $row['id']; ?>)">
+                                    <i class="fas fa-trash"></i>
+                                </a>
                             </td>
                         </tr>
                     <?php } ?>

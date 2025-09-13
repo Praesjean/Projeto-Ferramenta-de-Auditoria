@@ -145,15 +145,39 @@ a {
     color: white;
 }
 
+.acoes a {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    padding: 0;
+    border-radius: 6px;
+    margin: 0 5px;
+    font-size: 18px;
+    transition: transform 0.2s;
+}
+
+.acoes a.editar i {
+    color: white;
+}
+
+.acoes a.excluir i {
+    color: white;
+}
+
+.acoes a:hover i {
+    transform: scale(1.10);
+    transition: 0.2s;
+}
+
 a.editar:hover {
     background: #e0a800;
-    transform: scale(1.05);
     transition: 0.2s;
 }
 
 a.excluir:hover {
     background: #c82333;
-    transform: scale(1.05);
     transition: 0.2s;
 }
 
