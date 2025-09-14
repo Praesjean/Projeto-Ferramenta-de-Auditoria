@@ -24,19 +24,18 @@ if (!isset($_GET['nc_id'])) {
 
 $nc_id = intval($_GET['nc_id']);
 
-$sql = "SELECT nc.id AS nc_id,
-               nc.descricao AS nc_descricao,
-               nc.criado_em AS nc_criado,
-               ci.descricao AS item_descricao,
-               c.titulo AS checklist_titulo,
-               a.id AS auditoria_id,
-               u_responsavel.nome AS responsavel_nome,
-               u_responsavel.email AS responsavel_email,
-               c.auditor AS auditor_nome
+$sql = "SELECT 
+            nc.id AS nc_id,
+            nc.descricao AS nc_descricao,
+            nc.criado_em AS nc_criado,
+            ar.descricao_item AS descricao_item,
+            a.titulo_checklist AS titulo_checklist,
+            u_responsavel.nome AS responsavel_nome,
+            u_responsavel.email AS responsavel_email,
+            a.auditor_responsavel AS auditor_nome
         FROM nao_conformidades nc
         JOIN auditorias a ON nc.auditoria_id = a.id
-        JOIN checklist_itens ci ON nc.item_id = ci.id
-        JOIN checklists c ON a.checklist_id = c.id
+        JOIN auditoria_respostas ar ON nc.item_id = ar.item_id AND a.id = ar.auditoria_id
         JOIN usuarios u_responsavel ON a.usuario_id = u_responsavel.id
         WHERE nc.id = ?";
 $stmt = $conn->prepare($sql);
@@ -50,19 +49,18 @@ if ($result->num_rows === 0) {
 
 $nc = $result->fetch_assoc();
 
-$mensagem_template = "Solicitação de Resolução de Não Conformidade\n";
-$mensagem_template .= "----------------------------------------\n";
-$mensagem_template .= "Código de Controle: {$nc['nc_id']} - {$nc['item_descricao']}\n";
-$mensagem_template .= "Checklist: {$nc['checklist_titulo']}\n";
-$mensagem_template .= "Projeto: {$nc['checklist_titulo']}\n";
-$mensagem_template .= "Responsável: {$nc['responsavel_nome']}\n";
-$mensagem_template .= "Data de Solicitação: ".date("d/m/Y", strtotime($nc['nc_criado']))."\n";
-$mensagem_template .= "Prazo de Resolução: ".date("d/m/Y", strtotime("+3 days"))."\n";
+$mensagem_template = "Código de Controle: {$nc['nc_id']}\n";
+$mensagem_template .= "Projeto: {$nc['titulo_checklist']}\n";
+$mensagem_template .= "Responsável: \n";
+$mensagem_template .= "Data de Solicitação: ".date("d/m/Y H:i", strtotime($nc['nc_criado']))."\n";
+$mensagem_template .= "Nº de Escalonamentos: \n";
+$mensagem_template .= "Data de Resolução: \n";
 $mensagem_template .= "RQA Responsável: {$nc['auditor_nome']}\n";
 $mensagem_template .= "----------------------------------------\n";
-$mensagem_template .= "Descrição:\n{$nc['nc_descricao']}\n";
-$mensagem_template .= "Classificação: Média-Simples | 3 Dias\n";
-$mensagem_template .= "Ação Corretiva Indicada: CM | Corrigir itens conforme regras\n";
+$mensagem_template .= "Classificação:\n";
+$mensagem_template .= "Descrição: {$nc['descricao_item']}\n";
+$mensagem_template .= "Ação Corretiva Indicada:\n";
+$mensagem_template .= "Observações:";
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
     $destinatario = trim($_POST['destinatario']);
@@ -133,10 +131,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
 
         <form method="POST">
             <label>Destinatário</label>
-            <input type="email" name="destinatario" placeholder="exemplo@gmail.com" value="<?php echo htmlspecialchars($nc['responsavel_email']); ?>" required>
+            <input type="email" name="destinatario" placeholder="exemplo@gmail.com" required>
 
             <label>Assunto</label>
-            <input type="text" name="assunto" placeholder="Digite o assunto" value="Solicitação de Resolução de Não Conformidade - NC <?php echo $nc['nc_id']; ?>" required>
+            <input type="text" name="assunto" placeholder="Digite o assunto" value="Solicitação de Resolução de Não Conformidade" required>
 
             <label>Mensagem</label>
             <textarea name="mensagem"><?php echo htmlspecialchars($mensagem_template); ?></textarea>
