@@ -9,6 +9,10 @@ if (!isset($_SESSION['usuario_id'])) {
 
 $usuario_id = $_SESSION['usuario_id'];
 $mensagem = "";
+if (isset($_SESSION['mensagem_sucesso'])) {
+    $mensagem = $_SESSION['mensagem_sucesso'];
+    unset($_SESSION['mensagem_sucesso']);
+}
 
 if (!isset($_GET['id'])) {
     header("Location: gerenciar_checklists.php");
@@ -45,6 +49,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     $sqlUpd = "UPDATE checklists SET titulo=?, descricao=?, autor_documento=?, auditor=? WHERE id=? AND usuario_id=?";
     $stmtUpd = $conn->prepare($sqlUpd);
     $stmtUpd->bind_param("ssssii", $titulo, $descricao, $autor_documento, $auditor, $checklist_id, $usuario_id);
+    $stmtUpd->execute();
 
     $sqlDelItens = "DELETE FROM checklist_itens WHERE checklist_id=?";
     $stmtDel = $conn->prepare($sqlDelItens);
@@ -60,7 +65,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
         }
     }
 
-    $mensagem = "Checklist atualizado com sucesso!";
+    $_SESSION['mensagem_sucesso'] = "Checklist atualizado com sucesso!";
+    header("Location: editar_checklist.php?id=" . $checklist_id);
+    exit;
 }
 ?>
 
@@ -86,21 +93,23 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
         <form method="POST" action="">
             <label>Título:</label>
-            <input type="text" name="titulo" value="<?php echo htmlspecialchars($checklist['titulo']); ?>" required>
+            <input type="text" name="titulo" value="<?php echo htmlspecialchars($checklist['titulo']); ?>">
 
             <label>Descrição:</label>
             <textarea name="descricao"><?php echo htmlspecialchars($checklist['descricao']); ?></textarea>
 
             <label>Autor do Documento:</label>
-            <input type="text" name="autor_documento" value="<?php echo htmlspecialchars($checklist['autor_documento']); ?>" required>
+            <input type="text" name="autor_documento" value="<?php echo htmlspecialchars($checklist['autor_documento']); ?>">
 
             <label>Auditor Responsável:</label>
-            <input type="text" name="auditor" value="<?php echo htmlspecialchars($checklist['auditor']); ?>" required>
+            <input type="text" name="auditor" value="<?php echo htmlspecialchars($checklist['auditor']); ?>">
 
             <h3>Itens do Checklist</h3>
             <div id="itens">
                 <?php while($item = $itens->fetch_assoc()) { ?>
-                    <input type="text" name="itens[]" value="<?php echo htmlspecialchars($item['descricao']); ?>" required>
+                    <div style="display: flex; align-items: center; margin-bottom: 5px;">
+                        <input type="text" name="itens[]" value="<?php echo htmlspecialchars($item['descricao']); ?>" style="flex: 1; padding: 8px; font-size: 16px;">
+                    </div>
                 <?php } ?>
             </div>
 

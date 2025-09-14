@@ -11,7 +11,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         const titulo = form.querySelector("input[name='titulo']");
         const auditor = form.querySelector("input[name='auditor']");
-        const autor = form.querySelector("input[name='autor']");
+        const autor = form.querySelector("input[name='autor_documento']");
         const descricao = form.querySelector("textarea[name='descricao']");
         const itens = [...form.querySelectorAll("input[name='itens[]']")];
 
@@ -25,7 +25,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
         if (auditor.value.trim() === "") {
             e.preventDefault();
-            setError(auditor, "O campo Auditor é obrigatório.");
+            setError(auditor, "O campo Auditor Responsável é obrigatório.");
             valid = false;
         } else {
             removeError(auditor);
