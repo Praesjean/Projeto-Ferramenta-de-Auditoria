@@ -1,4 +1,7 @@
 <?php
+ini_set('session.gc_maxlifetime', 604800); 
+session_set_cookie_params(604800);
+
 session_start();
 include('../../conecta_db.php');
 
@@ -31,7 +34,7 @@ $sql = "SELECT nc.id AS nc_id, nc.descricao, nc.status, nc.criado_em, a.titulo_c
         FROM nao_conformidades nc
         JOIN auditorias a ON nc.auditoria_id = a.id
         WHERE a.usuario_id = ?
-        ORDER BY nc.criado_em DESC";
+        ORDER BY nc.criado_em ASC";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
@@ -43,108 +46,28 @@ $nc_list = $stmt->get_result();
 <head>
     <meta charset="UTF-8">
     <title>Sistema de Auditoria | Não Conformidades</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background: #f4f6f8;
-            padding: 20px;
-        }
-        .container {
-            background: white;
-            padding: 20px;
-            border-radius: 10px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-            max-width: 1000px;
-            margin: auto;
-        }
-        h2 {
-            text-align: center;
-        }
-        .mensagem {
-            text-align: center;
-            color: green;
-            margin-bottom: 15px;
-            font-size: 16px;
-        }
-        table {
-            width: 100%;
-            border-collapse: separate;
-            border-spacing: 0;
-            margin-top: 15px;
-            margin-bottom: 40px;
-            border-radius: 10px;
-            overflow: hidden;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-            text-align: center;
-            font-size: 16px;
-        }
-        th {
-            background: #0077cc;
-            color: white;
-        }
-        tr:nth-child(even) {
-            background: #f9f9f9;
-        }
-        select {
-            padding: 5px;
-            font-size: 16px;
-            border-radius: 5px;
-        }
-        button {
-            padding: 6px 12px;
-            background: #28a745;
-            color: white;
-            border: none;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 16px;
-            transition: background 0.3s, transform 0.2s;
-        }
-        button:hover {
-            background: #218838;
-            transform: scale(1.03);
-        }
-        .enviar-btn {
-            background: #0077cc;
-        }
-        .enviar-btn:hover {
-            background: #005fa3;
-        }
-        .voltar {
-            display: block;
-            width: fit-content;
-            margin: 20px auto 0 auto;
-            text-align: center;
-            text-decoration: none;
-            color: black;
-            background: #bababaff;
-            padding: 10px 20px;
-            border-radius: 8px;
-            transition: background 0.3s, transform 0.2s;
-            font-size: 16px;
-        }
-        .voltar:hover {
-            background: #979797ff;
-            transform: scale(1.05);
-        }
-        .sem-nao-conformidades {
-            text-align: center;
-            margin: 20px 0;
-            font-size: 16px;
-            color: #555;
-        }
-    </style>
+    <link href="../../styles/pages/nao_conformidades/nao_conformidades.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <header class="header">
+        <div class="user-info">
+            <p>Nome: <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></p>
+            <p>E-mail: <?php echo htmlspecialchars($_SESSION['usuario_email']); ?></p>
+        </div>
+
+        <h1>Sistema de Auditoria</h1>
+
+        <div>
+            <a href="logout.php" class="logout-btn" title="Sair">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </header>
+
     <div class="container">
         <h2>Não Conformidades</h2>
-
-        <?php if ($mensagem) echo "<p class='mensagem'>$mensagem</p>"; ?>
-
+        
         <?php if ($nc_list->num_rows > 0) { ?>
             <table>
                 <tr>
@@ -186,5 +109,10 @@ $nc_list = $stmt->get_result();
             <a class="voltar" href="dashboard.php">⬅ Voltar</a>
         </div>
     </div>
+
+    <footer>
+        &copy; <?php echo date('Y'); ?> Sistema de Auditoria. Todos os direitos reservados.
+        <br>Desenvolvido por: Arthur Rodrigues, Jean Inácio, João Gabriel e Stefany Carlos.
+    </footer>
 </body>
 </html>

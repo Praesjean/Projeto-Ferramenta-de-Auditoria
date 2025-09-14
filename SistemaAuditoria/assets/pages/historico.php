@@ -59,12 +59,9 @@ $auditorias = $stmt->get_result();
                     <th>Resultado (%)</th>
                     <th>Detalhes</th>
                 </tr>
-                <?php 
-                $contador = 1;
-                while ($a = $auditorias->fetch_assoc()) { 
-                ?>
+                <?php while ($a = $auditorias->fetch_assoc()) { ?>
                 <tr>
-                    <td><?php echo $contador; ?></td>
+                    <td><?php echo $a['id']; ?></td>
                     <td><?php echo htmlspecialchars($a['titulo']); ?></td>
                     <td><?php echo date("d/m/Y H:i:s", strtotime($a['realizado_em'])); ?></td>
                     <td><?php echo $a['resultado']; ?>%</td>
@@ -77,9 +74,7 @@ $auditorias = $stmt->get_result();
                         </button>
                     </td>
                 </tr>
-                <?php 
-                    $contador++;
-                } ?>
+                <?php } ?>
             </table>
         <?php } else { ?>
             <p class="sem-auditoria">Nenhuma auditoria realizada até o momento.</p>
