@@ -1,4 +1,7 @@
 <?php
+ini_set('session.gc_maxlifetime', 604800); 
+session_set_cookie_params(604800);
+
 session_start();
 include('../../conecta_db.php');
 
@@ -77,6 +80,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
     <meta charset="UTF-8">
     <title>Sistema de Auditoria | Editar Checklist</title>
     <link href="../../styles/pages/editar_checklist/editar_checklist.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
@@ -84,8 +88,14 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
             <p>Nome: <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></p>
             <p>E-mail: <?php echo htmlspecialchars($_SESSION['usuario_email']); ?></p>
         </div>
+
         <h1>Sistema de Auditoria</h1>
-        <div><a href="logout.php" class="logout-btn">Sair</a></div>
+
+        <div>
+            <a href="logout.php" class="logout-btn" title="Sair">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
     </header>
 
     <div class="container">

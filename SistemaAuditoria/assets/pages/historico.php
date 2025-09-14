@@ -1,4 +1,7 @@
 <?php
+ini_set('session.gc_maxlifetime', 604800); 
+session_set_cookie_params(604800);
+
 session_start();
 include('../../conecta_db.php');
 
@@ -39,7 +42,9 @@ $auditorias = $stmt->get_result();
         <h1>Sistema de Auditoria</h1>
 
         <div>
-            <a href="logout.php" class="logout-btn">Sair</a>
+            <a href="logout.php" class="logout-btn" title="Sair">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
         </div>
     </header>
 

@@ -1,4 +1,7 @@
 <?php
+ini_set('session.gc_maxlifetime', 604800); 
+session_set_cookie_params(604800);
+
 session_start();
 include('../../conecta_db.php');
 
@@ -18,6 +21,7 @@ $usuario_email = $_SESSION['usuario_email'];
     <title>Sistema de Auditoria | Dashboard</title>
     <link rel="stylesheet" href="../../global.css">
     <link href="../../styles/pages/dashboard/dashboard.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <div class="header">
@@ -29,7 +33,9 @@ $usuario_email = $_SESSION['usuario_email'];
         <h1>Sistema de Auditoria</h1>
 
         <div>
-            <a href="logout.php" class="logout-btn">Sair</a>
+            <a href="logout.php" class="logout-btn" title="Sair">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
         </div>
     </div>
 

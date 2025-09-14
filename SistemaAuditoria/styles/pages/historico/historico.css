@@ -54,6 +54,15 @@ body {
     transform: scale(1.05);
 }
 
+.logout-btn i {
+    color: white;
+    transition: color 0.3s;
+}
+
+.logout-btn:hover i {
+    transform: scale(1.05);
+}
+
 .container {
     background: white;
     padding: 20px;

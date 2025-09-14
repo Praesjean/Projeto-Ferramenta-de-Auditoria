@@ -1,4 +1,7 @@
 <?php
+ini_set('session.gc_maxlifetime', 604800); 
+session_set_cookie_params(604800);
+
 session_start();
 include('../../conecta_db.php');
 
@@ -50,6 +53,7 @@ $respostas = $stmtRes->get_result();
     <meta charset="UTF-8">
     <title>Sistema de Auditoria | Detalhes da Auditoria</title>
     <link href="../../styles/pages/ver_auditoria/ver_auditoria.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
@@ -61,7 +65,9 @@ $respostas = $stmtRes->get_result();
         <h1>Sistema de Auditoria</h1>
 
         <div>
-            <a href="logout.php" class="logout-btn">Sair</a>
+            <a href="logout.php" class="logout-btn" title="Sair">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
         </div>
     </header>
 
