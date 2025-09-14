@@ -124,6 +124,15 @@ tr:nth-child(even) {
     transform: scale(1.05);
 }
 
+.sem-nc {
+    text-align: center;
+    margin-top: 20px;
+    font-size: 16px;
+    color: black;
+    font-weight: 500;
+    font-family: Arial, sans-serif;
+}
+
 footer {
     background: #0077cc;
     color: white;

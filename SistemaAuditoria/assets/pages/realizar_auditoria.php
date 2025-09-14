@@ -117,9 +117,9 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
                                     <td>
                                         <select name="respostas[<?php echo $item['id']; ?>]" required>
                                             <option value="">-- Selecione --</option>
-                                            <option value="SIM">SIM</option>
-                                            <option value="NAO">NÃO</option>
-                                            <option value="NA">N/A</option>
+                                            <option value="SIM">Sim</option>
+                                            <option value="NAO">Não</option>
+                                            <option value="NA">Não aplicável</option>
                                         </select>
                                     </td>
                                 </tr>

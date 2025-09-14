@@ -69,12 +69,12 @@ $resultado = $stmt->get_result();
                             <td class="texto"><?php echo htmlspecialchars($row['auditor']); ?></td>
                             <td class="texto"><?php echo date("d/m/Y H:i:s", strtotime($row['criado_em'])); ?></td>
                             <td class="acoes">
-                                <a class="editar" title="Editar" href="editar_checklist.php?id=<?php echo $row['id']; ?>">
+                                <a class="detalhes-btn" title="Editar checklist" href="editar_checklist.php?id=<?php echo $row['id']; ?>">
                                     <i class="fas fa-pen"></i>
                                 </a>
-                                <a class="excluir" title="Excluir" href="#" onclick="confirmarExclusao(<?php echo $row['id']; ?>)">
+                                <button class="excluir-btn" title="Excluir checklist" onclick="confirmarExclusao(<?php echo $row['id']; ?>)">
                                     <i class="fas fa-trash"></i>
-                                </a>
+                                </button>
                             </td>
                         </tr>
                     <?php } ?>

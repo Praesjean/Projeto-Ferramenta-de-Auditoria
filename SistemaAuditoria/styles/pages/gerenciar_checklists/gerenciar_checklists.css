@@ -135,50 +135,39 @@ a {
     font-size: 16px;
 }
 
-.editar {
-    background: #ffc107;
-    color: black;
-}
-
-.excluir {
-    background: #dc3545;
+.detalhes-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #28a745;
     color: white;
-}
-
-.acoes a {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    width: 36px;
-    height: 36px;
-    padding: 0;
     border-radius: 6px;
-    margin: 0 5px;
-    font-size: 18px;
-    transition: transform 0.2s;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
 }
 
-.acoes a.editar i {
+.detalhes-btn:hover {
+    background: #218838;
+    transform: scale(1.05);
+}
+
+.excluir-btn {
+    display: inline-block;
+    padding: 6px 12px;
+    background: #e74c3c;
     color: white;
+    border: none;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 16px;
+    cursor: pointer;
+    transition: background 0.3s, transform 0.2s;
+    margin-left: 5px;
 }
 
-.acoes a.excluir i {
-    color: white;
-}
-
-.acoes a:hover i {
-    transform: scale(1.10);
-    transition: 0.2s;
-}
-
-a.editar:hover {
-    background: #e0a800;
-    transition: 0.2s;
-}
-
-a.excluir:hover {
-    background: #c82333;
-    transition: 0.2s;
+.excluir-btn:hover {
+    background: #c0392b;
+    transform: scale(1.05);
 }
 
 .voltar {

@@ -14,7 +14,7 @@ $sql = "SELECT a.id, a.realizado_em, a.resultado, c.titulo
         FROM auditorias a
         JOIN checklists c ON a.checklist_id = c.id
         WHERE a.usuario_id = ?
-        ORDER BY a.realizado_em DESC";
+        ORDER BY a.realizado_em ASC";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();
@@ -27,6 +27,7 @@ $auditorias = $stmt->get_result();
     <meta charset="UTF-8">
     <title>Sistema de Auditoria | Histórico de Auditorias</title>
     <link href="../../styles/pages/historico/historico.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
     <header class="header">
@@ -61,11 +62,15 @@ $auditorias = $stmt->get_result();
                 <tr>
                     <td><?php echo $contador; ?></td>
                     <td><?php echo htmlspecialchars($a['titulo']); ?></td>
-                    <td><?php echo date("d/m/Y H:i", strtotime($a['realizado_em'])); ?></td>
+                    <td><?php echo date("d/m/Y H:i:s", strtotime($a['realizado_em'])); ?></td>
                     <td><?php echo $a['resultado']; ?>%</td>
                     <td>
-                        <a class="detalhes-btn" href="ver_auditoria.php?id=<?php echo $a['id']; ?>">Verificar</a>
-                        <button class="excluir-btn" data-id="<?php echo $a['id']; ?>">Excluir</button>
+                        <a class="detalhes-btn" href="ver_auditoria.php?id=<?php echo $a['id']; ?>" title="Ver detalhes">
+                            <i class="fas fa-eye"></i>
+                        </a>
+                        <button class="excluir-btn" data-id="<?php echo $a['id']; ?>" title="Excluir auditoria">
+                            <i class="fas fa-trash-alt"></i>
+                        </button>
                     </td>
                 </tr>
                 <?php 
