@@ -24,6 +24,21 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
     $checklist_id = intval($_POST['checklist_id']);
     $respostas = $_POST['respostas'];
 
+    $sqlChk = "SELECT titulo, descricao, autor_documento, auditor FROM checklists WHERE id = ?";
+    $stmtChk = $conn->prepare($sqlChk);
+    $stmtChk->bind_param("i", $checklist_id);
+    $stmtChk->execute();
+    $resultChk = $stmtChk->get_result();
+    if ($rowChk = $resultChk->fetch_assoc()) {
+        $titulo_checklist = $rowChk['titulo'];
+        $descricao_checklist = $rowChk['descricao'];
+        $autor_documento = $rowChk['autor_documento'];
+        $auditor_responsavel = $rowChk['auditor'];
+    } else {
+        die("Checklist não encontrado.");
+    }
+    $stmtChk->close();
+
     $sim = 0;
     $nao = 0;
 
@@ -34,20 +49,31 @@ if ($_SERVER["REQUEST_METHOD"] == "POST" && isset($_POST['checklist_id'])) {
 
     $resultado_final = ($sim + $nao > 0) ? round(($sim / ($sim + $nao)) * 100, 2) : 0;
 
-    $sqlAuditoria = "INSERT INTO auditorias (checklist_id, usuario_id, resultado) VALUES (?, ?, ?)";
+    $sqlAuditoria = "INSERT INTO auditorias (checklist_id, usuario_id, resultado, titulo_checklist, descricao_checklist, autor_documento, auditor_responsavel) VALUES (?, ?, ?, ?, ?, ?, ?)";
     $stmtA = $conn->prepare($sqlAuditoria);
-    $stmtA->bind_param("iid", $checklist_id, $usuario_id, $resultado_final);
+    $stmtA->bind_param("iidssss", $checklist_id, $usuario_id, $resultado_final, $titulo_checklist, $descricao_checklist, $autor_documento, $auditor_responsavel);
     $stmtA->execute();
     $auditoria_id = $stmtA->insert_id;
 
-    $sqlResp = "INSERT INTO auditoria_respostas (auditoria_id, item_id, resposta) VALUES (?, ?, ?)";
+    $sqlResp = "INSERT INTO auditoria_respostas (auditoria_id, item_id, descricao_item, resposta) VALUES (?, ?, ?, ?)";
     $stmtR = $conn->prepare($sqlResp);
 
     $sqlNC = "INSERT INTO nao_conformidades (auditoria_id, item_id, descricao) VALUES (?, ?, ?)";
     $stmtNC = $conn->prepare($sqlNC);
 
     foreach ($respostas as $item_id => $resposta) {
-        $stmtR->bind_param("iis", $auditoria_id, $item_id, $resposta);
+        $sqlDesc = "SELECT descricao FROM checklist_itens WHERE id = ?";
+        $stmtDesc = $conn->prepare($sqlDesc);
+        $stmtDesc->bind_param("i", $item_id);
+        $stmtDesc->execute();
+        $resultDesc = $stmtDesc->get_result();
+        $descricao_item = "";
+        if ($rowDesc = $resultDesc->fetch_assoc()) {
+            $descricao_item = $rowDesc['descricao'];
+        }
+        $stmtDesc->close();
+
+        $stmtR->bind_param("iiss", $auditoria_id, $item_id, $descricao_item, $resposta);
         $stmtR->execute();
 
         if ($resposta == "NAO") {

@@ -13,11 +13,10 @@ if (!isset($_SESSION['usuario_id'])) {
 $sucesso = isset($_GET['sucesso']) ? intval($_GET['sucesso']) : 0;
 $usuario_id = $_SESSION['usuario_id'];
 
-$sql = "SELECT a.id, a.realizado_em, a.resultado, c.titulo 
-        FROM auditorias a
-        JOIN checklists c ON a.checklist_id = c.id
-        WHERE a.usuario_id = ?
-        ORDER BY a.realizado_em ASC";
+$sql = "SELECT id, realizado_em, resultado, titulo_checklist AS titulo
+        FROM auditorias
+        WHERE usuario_id = ?
+        ORDER BY realizado_em ASC";
 $stmt = $conn->prepare($sql);
 $stmt->bind_param("i", $usuario_id);
 $stmt->execute();

@@ -11,6 +11,7 @@ if (!isset($_SESSION['usuario_id'])) {
 }
 
 $usuario_id = $_SESSION['usuario_id'];
+$usuario_nome = $_SESSION['usuario_nome'];
 
 if (!isset($_GET['id'])) {
     header("Location: historico.php");
@@ -19,28 +20,29 @@ if (!isset($_GET['id'])) {
 
 $auditoria_id = intval($_GET['id']);
 
-$sql = "SELECT a.id, a.resultado, a.realizado_em, 
-               c.titulo, c.descricao AS checklist_desc, 
-               c.auditor, c.autor_documento,
-               u.nome AS autor_checklist
-        FROM auditorias a
-        JOIN checklists c ON a.checklist_id = c.id
-        JOIN usuarios u ON c.usuario_id = u.id
-        WHERE a.id = ? AND a.usuario_id = ?";
-$stmt = $conn->prepare($sql);
-$stmt->bind_param("ii", $auditoria_id, $usuario_id);
-$stmt->execute();
-$auditoria = $stmt->get_result()->fetch_assoc();
+$sqlAuditoria = "SELECT id, checklist_id, resultado, realizado_em, 
+                        titulo_checklist AS titulo, descricao_checklist AS checklist_desc,
+                        autor_documento, auditor_responsavel
+                 FROM auditorias
+                 WHERE id = ? AND usuario_id = ?";
+$stmtAud = $conn->prepare($sqlAuditoria);
+$stmtAud->bind_param("ii", $auditoria_id, $usuario_id);
+$stmtAud->execute();
+$auditoria = $stmtAud->get_result()->fetch_assoc();
 
 if (!$auditoria) {
     die("Auditoria não encontrada.");
 }
 
-$sqlRespostas = "SELECT ai.id AS item_numero, ai.descricao AS item, ar.resposta, nc.descricao AS nc_desc, nc.status AS nc_status
+$contador = 1;
+
+$sqlRespostas = "SELECT ar.item_id, ar.descricao_item, ar.resposta, 
+                        nc.status AS nc_status
                  FROM auditoria_respostas ar
-                 JOIN checklist_itens ai ON ar.item_id = ai.id
-                 LEFT JOIN nao_conformidades nc ON nc.auditoria_id = ar.auditoria_id AND nc.item_id = ai.id
-                 WHERE ar.auditoria_id = ?";
+                 LEFT JOIN nao_conformidades nc 
+                    ON nc.auditoria_id = ar.auditoria_id AND nc.item_id = ar.item_id
+                 WHERE ar.auditoria_id = ?
+                 ORDER BY ar.item_id";
 $stmtRes = $conn->prepare($sqlRespostas);
 $stmtRes->bind_param("i", $auditoria_id);
 $stmtRes->execute();
@@ -74,29 +76,32 @@ $respostas = $stmtRes->get_result();
     <div class="container">
         <h2>Auditoria: <?php echo htmlspecialchars($auditoria['titulo']); ?></h2>
         <p><strong>Descrição do checklist:</strong> <?php echo htmlspecialchars($auditoria['checklist_desc']); ?></p>
-        <p><strong>Autor do checklist:</strong> <?php echo htmlspecialchars($auditoria['autor_checklist']); ?></p>
+        <p><strong>Autor do checklist:</strong> <?php echo htmlspecialchars($usuario_nome); ?></p>
         <p><strong>Autor do artefato avaliado:</strong> <?php echo htmlspecialchars($auditoria['autor_documento']); ?></p>
-        <p><strong>Auditor:</strong> <?php echo htmlspecialchars($auditoria['auditor']); ?></p>
+        <p><strong>Auditor:</strong> <?php echo htmlspecialchars($auditoria['auditor_responsavel']); ?></p>
         <p><strong>Data da auditoria:</strong> <?php echo date("d/m/Y H:i:s", strtotime($auditoria['realizado_em'])); ?></p>
         <p><strong>Resultado:</strong> <?php echo $auditoria['resultado']; ?>%</p>
 
         <h3>Respostas por Item</h3>
         <table>
             <tr>
-                <th>Item</th>
+                <th>Nº do Item</th>
                 <th>Resposta</th>
-                <th>Não Conformidade</th>
+                <th>Descrição</th>
                 <th>Status da NC</th>
             </tr>
+
             <?php 
             $temNC = false;
-            while($r = $respostas->fetch_assoc()) { 
-                if (!empty($r['nc_desc'])) {
+            while($r = $respostas->fetch_assoc()) {
+                $numero = $contador++;
+
+                if (!empty(trim($r['nc_status'] ?? ''))) {
                     $temNC = true;
                 }
             ?>
                 <tr>
-                    <td><?php echo htmlspecialchars($r['item']); ?></td>
+                    <td><?php echo $numero; ?></td>
                     <td>
                         <?php
                         switch (strtoupper($r['resposta'])) {
@@ -104,7 +109,6 @@ $respostas = $stmtRes->get_result();
                                 echo 'Sim';
                                 break;
                             case 'NAO':
-                            case 'NÃO':
                                 echo 'Não';
                                 break;
                             case 'NA':
@@ -116,19 +120,12 @@ $respostas = $stmtRes->get_result();
                         ?>
                     </td>
 
-                    <td>
-                        <?php 
-                            if (!empty($r['nc_desc'])) {
-                            echo "Item " . htmlspecialchars($r['item_numero']);
-                            } else {
-                            echo "";
-                            }
-                        ?>
-                    </td>
+                    <td><?php echo htmlspecialchars($r['descricao_item']); ?></td>
 
                     <td>
                         <?php
-                        switch (strtoupper($r['nc_status'])) {
+                        $status = strtoupper(trim($r['nc_status'] ?? ''));
+                        switch ($status) {
                             case 'ABERTA':
                                 echo 'Aberta';
                                 break;

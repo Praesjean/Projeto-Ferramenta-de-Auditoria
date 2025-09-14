@@ -33,7 +33,10 @@ CREATE TABLE auditorias (
     usuario_id INT NOT NULL,
     resultado FLOAT NOT NULL,
     realizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    id_usuario_auditoria INT NOT NULL DEFAULT 0,
+    titulo_checklist TEXT NOT NULL,
+    descricao_checklist TEXT NOT NULL,
+    autor_documento TEXT NOT NULL,
+    auditor_responsavel TEXT NOT NULL,
     FOREIGN KEY (checklist_id) REFERENCES checklists(id),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
@@ -42,9 +45,9 @@ CREATE TABLE auditoria_respostas (
     id INT AUTO_INCREMENT PRIMARY KEY,
     auditoria_id INT NOT NULL,
     item_id INT NOT NULL,
-    resposta ENUM('SIM','NAO','NA') NOT NULL,
-    FOREIGN KEY (auditoria_id) REFERENCES auditorias(id) ON DELETE CASCADE,
-    FOREIGN KEY (item_id) REFERENCES checklist_itens(id) ON DELETE CASCADE
+    descricao_item TEXT NOT NULL,
+    resposta ENUM('SIM', 'NAO', 'NA') NOT NULL,
+    FOREIGN KEY (auditoria_id) REFERENCES auditorias(id) ON DELETE CASCADE
 );
 
 CREATE TABLE nao_conformidades (
@@ -54,6 +57,5 @@ CREATE TABLE nao_conformidades (
     status ENUM('ABERTA','EM ANDAMENTO','RESOLVIDA') DEFAULT 'ABERTA',
     descricao TEXT,
     criado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (auditoria_id) REFERENCES auditorias(id) ON DELETE CASCADE,
-    FOREIGN KEY (item_id) REFERENCES checklist_itens(id) ON DELETE CASCADE
+    FOREIGN KEY (auditoria_id) REFERENCES auditorias(id) ON DELETE CASCADE
 );
