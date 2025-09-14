@@ -30,9 +30,11 @@ if (isset($_POST['atualizar'])) {
     }
 }
 
-$sql = "SELECT nc.id AS nc_id, nc.descricao, nc.status, nc.criado_em, a.titulo_checklist AS checklist, a.id AS auditoria_id
+$sql = "SELECT nc.id AS nc_id, nc.descricao, nc.status, nc.criado_em, 
+            a.titulo_checklist AS checklist, a.id AS auditoria_id, ar.descricao_item
         FROM nao_conformidades nc
         JOIN auditorias a ON nc.auditoria_id = a.id
+        JOIN auditoria_respostas ar ON ar.auditoria_id = nc.auditoria_id AND ar.item_id = nc.item_id
         WHERE a.usuario_id = ?
         ORDER BY nc.criado_em ASC";
 $stmt = $conn->prepare($sql);
@@ -69,38 +71,46 @@ $nc_list = $stmt->get_result();
         <h2>Não Conformidades</h2>
         
         <?php if ($nc_list->num_rows > 0) { ?>
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Checklist</th>
-                    <th>Auditoria</th>
-                    <th>Status</th>
-                    <th>Atualizar</th>
-                    <th>Ações</th>
-                </tr>
-                <?php while ($nc = $nc_list->fetch_assoc()) { ?>
+            <div class="table-wrapper">
+                <table>
                     <tr>
-                        <td><?php echo $nc['nc_id']; ?></td>
-                        <td><?php echo htmlspecialchars($nc['checklist']); ?></td>
-                        <td><?php echo $nc['auditoria_id']; ?></td>
-                        <td><?php echo $nc['status']; ?></td>
-                        <td>
-                            <form method="POST" action="">
-                                <input type="hidden" name="nc_id" value="<?php echo $nc['nc_id']; ?>">
-                                <select name="status">
-                                    <option value="ABERTA" <?php if($nc['status']=="ABERTA") echo "selected"; ?>>ABERTA</option>
-                                    <option value="EM ANDAMENTO" <?php if($nc['status']=="EM ANDAMENTO") echo "selected"; ?>>EM ANDAMENTO</option>
-                                    <option value="RESOLVIDA" <?php if($nc['status']=="RESOLVIDA") echo "selected"; ?>>RESOLVIDA</option>
-                                </select>
-                                <button type="submit" name="atualizar">Salvar</button>
-                            </form>
-                        </td>
-                        <td>
-                            <a href="enviar_nc.php?nc_id=<?php echo $nc['nc_id']; ?>" class="enviar-btn">Enviar por e-mail</a>
-                        </td>
+                        <th>Nº da Auditoria</th>
+                        <th>Checklist</th>
+                        <th>Item</th>
+                        <th>Status</th>
+                        <th>Ações</th>
                     </tr>
-                <?php } ?>
-            </table>
+                    <?php while ($nc = $nc_list->fetch_assoc()) { ?>
+                        <tr>
+                            <td><?php echo $nc['auditoria_id']; ?></td>
+                            <td><?php echo htmlspecialchars($nc['checklist']); ?></td>
+                            <td><?php echo htmlspecialchars($nc['descricao_item']); ?></td>
+                            <td>
+                                <form method="POST" action="">
+                                    <input type="hidden" name="nc_id" value="<?php echo $nc['nc_id']; ?>">
+                                    <select name="status" <?php echo $nc['status'] === 'RESOLVIDA' ? 'disabled' : ''; ?>>
+                                        <option value="ABERTA" <?php if($nc['status']=="ABERTA") echo "selected"; ?>>Aberta</option>
+                                        <option value="EM ANDAMENTO" <?php if($nc['status']=="EM ANDAMENTO") echo "selected"; ?>>Em andamento</option>
+                                        <option value="RESOLVIDA" <?php if($nc['status']=="RESOLVIDA") echo "selected"; ?>>Resolvida</option>
+                                    </select>
+                                    <?php if ($nc['status'] !== 'RESOLVIDA') { ?>
+                                        <button type="submit" name="atualizar" title="Salvar status" class="save-button">
+                                            <i class="fas fa-save"></i>
+                                        </button>
+                                    <?php } ?>
+                                </form>
+                            </td>
+                            <td>
+                                <?php if ($nc['status'] !== 'RESOLVIDA') { ?>
+                                    <a href="enviar_nc.php?nc_id=<?php echo $nc['nc_id']; ?>" class="enviar-btn" title="Enviar por e-mail">
+                                        <i class="fas fa-envelope"></i>
+                                    </a>
+                                <?php } ?>
+                            </td>
+                        </tr>
+                    <?php } ?>
+                </table>
+            </div>
         <?php } else { ?>
             <p class="sem-nao-conformidades">Nenhuma não conformidade encontrada.</p>
         <?php } ?>

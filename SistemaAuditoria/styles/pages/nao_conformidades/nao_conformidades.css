@@ -67,7 +67,7 @@ body {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    max-width: 900px;
+    max-width: 1100px;
     margin: 30px auto 40px auto;
     box-shadow: 0 2px 8px rgba(0,0,0,0.2);
     box-sizing: border-box;
@@ -92,6 +92,7 @@ table {
     border-radius: 10px;
     overflow: hidden;
     font-size: 16px;
+    table-layout: fixed;
 }
 
 th, td {
@@ -99,6 +100,9 @@ th, td {
     padding: 10px;
     text-align: center;
     font-size: 16px;
+    word-break: break-word;
+    overflow-wrap: break-word;
+    max-width: 200px;
 }
 
 th {
@@ -110,34 +114,49 @@ tr:nth-child(even) {
     background: #f9f9f9;
 }
 
+.table-wrapper {
+    overflow-x: auto;
+}
+
 select {
+    width: 75%;
     padding: 5px;
     font-size: 16px;
     border-radius: 5px;
 }
 
-button {
+.save-button {
+    display: inline-block;
+    border: none;
+    cursor: pointer;
     padding: 6px 12px;
     background: #28a745;
     color: white;
-    border: none;
     border-radius: 6px;
-    cursor: pointer;
+    text-decoration: none;
     font-size: 16px;
     transition: background 0.3s, transform 0.2s;
 }
 
-button:hover {
+.save-button:hover {
     background: #218838;
-    transform: scale(1.03);
+    transform: scale(1.05);
 }
 
 .enviar-btn {
+    display: inline-block;
+    padding: 6px 12px;
     background: #0077cc;
+    color: white;
+    border-radius: 6px;
+    text-decoration: none;
+    font-size: 16px;
+    transition: background 0.3s, transform 0.2s;
 }
 
 .enviar-btn:hover {
     background: #005fa3;
+    transform: scale(1.05);
 }
 
 .voltar {
