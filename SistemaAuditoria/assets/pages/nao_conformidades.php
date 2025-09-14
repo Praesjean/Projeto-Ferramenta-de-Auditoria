@@ -27,10 +27,9 @@ if (isset($_POST['atualizar'])) {
     }
 }
 
-$sql = "SELECT nc.id AS nc_id, nc.descricao, nc.status, nc.criado_em, c.titulo AS checklist, a.id AS auditoria_id
+$sql = "SELECT nc.id AS nc_id, nc.descricao, nc.status, nc.criado_em, a.titulo_checklist AS checklist, a.id AS auditoria_id
         FROM nao_conformidades nc
         JOIN auditorias a ON nc.auditoria_id = a.id
-        JOIN checklists c ON a.checklist_id = c.id
         WHERE a.usuario_id = ?
         ORDER BY nc.criado_em DESC";
 $stmt = $conn->prepare($sql);

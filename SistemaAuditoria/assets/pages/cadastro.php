@@ -99,7 +99,7 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
                 <input type="submit" value="Cadastrar-se" id="submit" class="register-btn" onclick="btnRegisterOnClick(event, this.form)">
             </form>
 
-            <p>Já tem conta? <a href="login.php">Login</a></p>
+            <p>Já tem uma conta? <a href="login.php">Login</a></p>
         </div>
     </main>
 

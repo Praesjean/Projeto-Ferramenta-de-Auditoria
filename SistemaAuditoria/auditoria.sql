@@ -29,7 +29,7 @@ CREATE TABLE checklist_itens (
 
 CREATE TABLE auditorias (
     id INT AUTO_INCREMENT PRIMARY KEY,
-    checklist_id INT NOT NULL,
+    checklist_id INT NULL,
     usuario_id INT NOT NULL,
     resultado FLOAT NOT NULL,
     realizado_em TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -37,7 +37,6 @@ CREATE TABLE auditorias (
     descricao_checklist TEXT NOT NULL,
     autor_documento TEXT NOT NULL,
     auditor_responsavel TEXT NOT NULL,
-    FOREIGN KEY (checklist_id) REFERENCES checklists(id),
     FOREIGN KEY (usuario_id) REFERENCES usuarios(id)
 );
 

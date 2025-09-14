@@ -86,7 +86,7 @@ if (isset($_SESSION['success_message'])) {
                 <input type="submit" value="Entrar"  id="submit" class="login-btn" onclick="btnRegisterOnClick(event, this.form)">
             </form>
 
-            <p>Não tem conta? <a href="cadastro.php">Cadastrar</a></p>
+            <p>Não tem uma conta? <a href="cadastro.php">Cadastrar</a></p>
         </div>
     </div>
 

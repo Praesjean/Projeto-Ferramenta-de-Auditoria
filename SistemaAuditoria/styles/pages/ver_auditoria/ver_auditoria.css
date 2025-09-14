@@ -135,9 +135,9 @@ tr:nth-child(even) {
 
 .sem-nc {
     text-align: center;
-    margin-top: 20px;
+    margin: 20px;
     font-size: 16px;
-    color: black;
+    color: #555;
     font-weight: 500;
     font-family: Arial, sans-serif;
 }
