@@ -113,6 +113,15 @@ button:hover {
     background: #005fa3;
 }
 
+.btn-container {
+    text-align: center;
+    margin-top: 12px;
+}
+
+.btn-container button {
+    display: inline-block;
+}
+
 .mensagem {
     margin-top: 10px;
     color: green;

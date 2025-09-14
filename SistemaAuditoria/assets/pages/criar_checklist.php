@@ -89,11 +89,13 @@ if ($_SERVER["REQUEST_METHOD"] == "POST") {
 
             <h3>Itens do Checklist</h3>
             <div id="itens"></div>
-            <button type="button" class="add-btn" onclick="adicionarItem()">+ Adicionar Item</button>
-            <button type="button" class="add-template-btn" onclick="usarTemplate()">Usar Checklist Pré-definido</button>
 
-            <br><br>
-            <button type="submit">Salvar Checklist</button>
+            <div class="btn-container">
+                <button type="button" class="add-btn" onclick="adicionarItem()">+ Adicionar Item</button>
+                <button type="button" class="add-template-btn" onclick="usarTemplate()">Usar Checklist Pré-definido</button>
+                <br><br>
+                <button type="submit">Salvar Checklist</button>
+            </div>
         </form>
 
         <a class="voltar" href="dashboard.php">⬅ Voltar</a>

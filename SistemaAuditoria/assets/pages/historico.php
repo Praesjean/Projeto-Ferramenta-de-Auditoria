@@ -51,31 +51,33 @@ $auditorias = $stmt->get_result();
         <h2>Histórico de Auditorias</h2>
 
         <?php if ($auditorias->num_rows > 0) { ?>
-            <table>
-                <tr>
-                    <th>ID</th>
-                    <th>Checklist</th>
-                    <th>Data</th>
-                    <th>Resultado (%)</th>
-                    <th>Detalhes</th>
-                </tr>
-                <?php while ($a = $auditorias->fetch_assoc()) { ?>
-                <tr>
-                    <td><?php echo $a['id']; ?></td>
-                    <td><?php echo htmlspecialchars($a['titulo']); ?></td>
-                    <td><?php echo date("d/m/Y H:i:s", strtotime($a['realizado_em'])); ?></td>
-                    <td><?php echo $a['resultado']; ?>%</td>
-                    <td>
-                        <a class="detalhes-btn" href="ver_auditoria.php?id=<?php echo $a['id']; ?>" title="Ver detalhes">
-                            <i class="fas fa-eye"></i>
-                        </a>
-                        <button class="excluir-btn" data-id="<?php echo $a['id']; ?>" title="Excluir auditoria">
-                            <i class="fas fa-trash-alt"></i>
-                        </button>
-                    </td>
-                </tr>
-                <?php } ?>
-            </table>
+            <div class="table-wrapper">
+                <table>
+                    <tr>
+                        <th>ID</th>
+                        <th>Checklist</th>
+                        <th>Data</th>
+                        <th>Resultado (%)</th>
+                        <th>Detalhes</th>
+                    </tr>
+                    <?php while ($a = $auditorias->fetch_assoc()) { ?>
+                    <tr>
+                        <td><?php echo $a['id']; ?></td>
+                        <td><?php echo htmlspecialchars($a['titulo']); ?></td>
+                        <td><?php echo date("d/m/Y H:i:s", strtotime($a['realizado_em'])); ?></td>
+                        <td><?php echo $a['resultado']; ?>%</td>
+                        <td>
+                            <a class="detalhes-btn" href="ver_auditoria.php?id=<?php echo $a['id']; ?>" title="Ver detalhes">
+                                <i class="fas fa-eye"></i>
+                            </a>
+                            <button class="excluir-btn" data-id="<?php echo $a['id']; ?>" title="Excluir auditoria">
+                                <i class="fas fa-trash-alt"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <?php } ?>
+                </table>
+            </div>
         <?php } else { ?>
             <p class="sem-auditoria">Nenhuma auditoria realizada até o momento.</p>
         <?php } ?>

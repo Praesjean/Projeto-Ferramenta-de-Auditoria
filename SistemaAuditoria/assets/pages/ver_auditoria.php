@@ -83,66 +83,68 @@ $respostas = $stmtRes->get_result();
         <p><strong>Resultado:</strong> <?php echo $auditoria['resultado']; ?>%</p>
 
         <h3>Respostas por Item</h3>
-        <table>
-            <tr>
-                <th>Nº do Item</th>
-                <th>Resposta</th>
-                <th>Descrição</th>
-                <th>Status da NC</th>
-            </tr>
-
-            <?php 
-            $temNC = false;
-            while($r = $respostas->fetch_assoc()) {
-                $numero = $contador++;
-
-                if (!empty(trim($r['nc_status'] ?? ''))) {
-                    $temNC = true;
-                }
-            ?>
+        <div class="table-wrapper">
+            <table>
                 <tr>
-                    <td><?php echo $numero; ?></td>
-                    <td>
-                        <?php
-                        switch (strtoupper($r['resposta'])) {
-                            case 'SIM':
-                                echo 'Sim';
-                                break;
-                            case 'NAO':
-                                echo 'Não';
-                                break;
-                            case 'NA':
-                                echo 'Não aplicável';
-                                break;
-                            default:
-                                echo htmlspecialchars($r['resposta']);
-                        }
-                        ?>
-                    </td>
-
-                    <td><?php echo htmlspecialchars($r['descricao_item']); ?></td>
-
-                    <td>
-                        <?php
-                        $status = strtoupper(trim($r['nc_status'] ?? ''));
-                        switch ($status) {
-                            case 'ABERTA':
-                                echo 'Aberta';
-                                break;
-                            case 'EM ANDAMENTO':
-                                echo 'Em andamento';
-                                break;
-                            case 'RESOLVIDA':
-                                echo 'Resolvida';
-                                break;
-                            default:
-                                echo htmlspecialchars($r['nc_status']);
-                        }
-                        ?>
-                    </td>
+                    <th>Nº do Item</th>
+                    <th>Resposta</th>
+                    <th>Descrição</th>
+                    <th>Status da NC</th>
                 </tr>
-            <?php } ?>
-        </table>
+
+                <?php 
+                $temNC = false;
+                while($r = $respostas->fetch_assoc()) {
+                    $numero = $contador++;
+
+                    if (!empty(trim($r['nc_status'] ?? ''))) {
+                        $temNC = true;
+                    }
+                ?>
+                    <tr>
+                        <td><?php echo $numero; ?></td>
+                        <td>
+                            <?php
+                            switch (strtoupper($r['resposta'])) {
+                                case 'SIM':
+                                    echo 'Sim';
+                                    break;
+                                case 'NAO':
+                                    echo 'Não';
+                                    break;
+                                case 'NA':
+                                    echo 'Não aplicável';
+                                    break;
+                                default:
+                                    echo htmlspecialchars($r['resposta']);
+                            }
+                            ?>
+                        </td>
+
+                        <td><?php echo htmlspecialchars($r['descricao_item']); ?></td>
+
+                        <td>
+                            <?php
+                            $status = strtoupper(trim($r['nc_status'] ?? ''));
+                            switch ($status) {
+                                case 'ABERTA':
+                                    echo 'Aberta';
+                                    break;
+                                case 'EM ANDAMENTO':
+                                    echo 'Em andamento';
+                                    break;
+                                case 'RESOLVIDA':
+                                    echo 'Resolvida';
+                                    break;
+                                default:
+                                    echo htmlspecialchars($r['nc_status']);
+                            }
+                            ?>
+                        </td>
+                    </tr>
+                <?php } ?>
+            </table>
+        </div>
 
         <?php if (!$temNC) { ?>
             <p class="sem-nc">⚠️Nenhuma não conformidade encontrada.</p>

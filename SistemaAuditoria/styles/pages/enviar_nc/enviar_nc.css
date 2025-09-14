@@ -1,11 +1,13 @@
 body {
     font-family: Arial, sans-serif;
-    background: #f4f6f8;
+    background: #f0f4f7;
     margin: 0;
-    padding-top: 80px;
-    padding-bottom: 80px;
     min-height: 100vh;
+    display: flex;
+    flex-direction: column;
     box-sizing: border-box;
+    padding-top: 90px;
+    padding-bottom: 100px;
 }
 
 .header {
@@ -67,46 +69,74 @@ body {
     background: white;
     padding: 20px;
     border-radius: 8px;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    max-width: 900px;
-    margin: 30px auto 40px auto;
+    box-shadow: 0px 2px 8px rgba(0,0,0,0.2);
+    max-width: 600px;
+    width: 100%;
+    min-width: 320px;
+    margin: 20px auto;
     box-sizing: border-box;
+    transition: all 0.2s ease;
 }
 
 h2 {
     text-align: center;
 }
 
-table {
+textarea {
     width: 100%;
-    margin-top: 15px;
-    border-collapse: collapse;
-    border-radius: 10px;
-    overflow: hidden;
-    font-size: 16px;
-    table-layout: fixed;
-}
-
-th, td {
-    border: 1px solid #ddd;
+    min-height: 180px;
+    max-height: 400px;
+    resize: vertical;
     padding: 10px;
-    text-align: center;
     font-size: 16px;
-    word-break: break-word;
+    font-family: Arial, sans-serif;
+    line-height: 1.5;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    white-space: pre-wrap;
+    word-wrap: break-word;
     overflow-wrap: break-word;
 }
 
-th {
+input[type=email], input[type=text], textarea {
+    width: 100%;
+    padding: 10px;
+    margin: 6px 0;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    box-sizing: border-box;
+    font-size: 16px;
+}
+
+#itens input {
+    width: 100%;
+    box-sizing: border-box;
+    margin-bottom: 5px;
+    font-size: 16px;
+}
+
+button {
+    padding: 10px 15px;
     background: #0077cc;
+    border: none;
     color: white;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
-tr:nth-child(even) {
-    background: #f9f9f9;
+button:hover {
+    background: #005fa3;
 }
 
-.table-wrapper {
-    overflow-x: auto;
+.btn-container {
+    text-align: center;
+    margin-top: 12px;
+}
+
+.btn-container button {
+    display: inline-block;
 }
 
 .voltar {
@@ -119,8 +149,8 @@ tr:nth-child(even) {
     background: #bababaff;
     padding: 10px 20px;
     border-radius: 8px;
-    font-size: 16px;
     transition: background 0.3s, transform 0.2s;
+    font-size: 16px;
 }
 
 .voltar:hover {
@@ -128,46 +158,14 @@ tr:nth-child(even) {
     transform: scale(1.05);
 }
 
-.detalhes-btn {
-    display: inline-block;
-    padding: 6px 12px;
-    background: #28a745;
-    color: white;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    transition: background 0.3s, transform 0.2s;
-}
-
-.detalhes-btn:hover {
-    background: #218838;
-    transform: scale(1.05);
-}
-
-.excluir-btn {
-    display: inline-block;
-    padding: 6px 12px;
-    background: #e74c3c;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    text-decoration: none;
-    font-size: 16px;
-    cursor: pointer;
-    transition: background 0.3s, transform 0.2s;
-    margin-left: 5px;
-}
-
-.excluir-btn:hover {
-    background: #c0392b;
-    transform: scale(1.05);
-}
-
-.sem-auditoria {
-    text-align: center;
-    margin: 20px 0;
-    font-size: 16px;
-    color: #555;
+.error-msg {
+    color: #e63636;
+    font-size: 14px;
+    display: block;
+    margin-top: 4px;
+    margin-bottom: 8px;
+    word-wrap: break-word;
+    max-width: 100%;
 }
 
 footer {

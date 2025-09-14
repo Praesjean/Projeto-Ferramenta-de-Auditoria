@@ -106,22 +106,26 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <title>Enviar E-mail</title>
-    <style>
-        body { font-family: Arial, sans-serif; background: #f4f6f8; padding: 20px; }
-        .container { background: white; padding: 20px; border-radius: 10px; max-width: 700px; margin: auto; box-shadow: 0 2px 8px rgba(0,0,0,0.2); }
-        h2 { text-align: center; }
-        label { display: block; margin-top: 10px; font-weight: bold; }
-        input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 6px; font-size: 14px; }
-        textarea { height: 250px; resize: vertical; }
-        button { margin-top: 15px; padding: 10px 20px; background: #0077cc; color: white; border: none; border-radius: 8px; cursor: pointer; font-size: 16px; transition: background 0.3s; }
-        button:hover { background: #005fa3; }
-        .msg { text-align: center; margin: 15px 0; font-weight: bold; }
-        .voltar { display: block; text-align: center; margin-top: 15px; text-decoration: none; color: black; background: #ccc; padding: 8px 16px; border-radius: 6px; }
-        .voltar:hover { background: #999; }
-    </style>
+    <title>Sistema de Auditoria | Enviar E-mail</title>
+    <link href="../../styles/pages/enviar_nc/enviar_nc.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
 </head>
 <body>
+    <header class="header">
+        <div class="user-info">
+            <p>Nome: <?php echo htmlspecialchars($_SESSION['usuario_nome']); ?></p>
+            <p>E-mail: <?php echo htmlspecialchars($_SESSION['usuario_email']); ?></p>
+        </div>
+
+        <h1>Sistema de Auditoria</h1>
+
+        <div>
+            <a href="logout.php" class="logout-btn" title="Sair">
+                <i class="fas fa-sign-out-alt"></i>
+            </a>
+        </div>
+    </header>
+
     <div class="container">
         <h2>Enviar E-mail</h2>
 
@@ -137,10 +141,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
             <label>Mensagem</label>
             <textarea name="mensagem"><?php echo htmlspecialchars($mensagem_template); ?></textarea>
 
-            <button type="submit" name="enviar_email">Enviar</button>
+            <div class="btn-container">
+                <button type="submit" name="enviar_email">Enviar</button>
+            </div>
         </form>
 
         <a class="voltar" href="nao_conformidades.php">⬅ Voltar</a>
     </div>
+
+    <footer>
+        &copy; <?php echo date('Y'); ?> Sistema de Auditoria. Todos os direitos reservados.
+        <br>Desenvolvido por: Arthur Rodrigues, Jean Inácio, João Gabriel e Stefany Carlos.
+    </footer>
 </body>
 </html>
