@@ -136,6 +136,9 @@ $respostas = $stmtRes->get_result();
                                 case 'RESOLVIDA':
                                     echo 'Resolvida';
                                     break;
+                                case 'NAO RESOLVIDA':
+                                    echo 'Não resolvida';
+                                    break;
                                 default:
                                     echo htmlspecialchars($r['nc_status']);
                             }

@@ -88,12 +88,13 @@ $nc_list = $stmt->get_result();
                             <td>
                                 <form method="POST" action="">
                                     <input type="hidden" name="nc_id" value="<?php echo $nc['nc_id']; ?>">
-                                    <select name="status" <?php echo $nc['status'] === 'RESOLVIDA' ? 'disabled' : ''; ?>>
+                                    <select name="status" <?php echo in_array($nc['status'], ['RESOLVIDA', 'NAO RESOLVIDA']) ? 'disabled' : ''; ?>>
                                         <option value="ABERTA" <?php if($nc['status']=="ABERTA") echo "selected"; ?>>Aberta</option>
                                         <option value="EM ANDAMENTO" <?php if($nc['status']=="EM ANDAMENTO") echo "selected"; ?>>Em andamento</option>
                                         <option value="RESOLVIDA" <?php if($nc['status']=="RESOLVIDA") echo "selected"; ?>>Resolvida</option>
+                                        <option value="NAO RESOLVIDA" <?php if($nc['status']=="NAO RESOLVIDA") echo "selected"; ?>>Não resolvida</option>
                                     </select>
-                                    <?php if ($nc['status'] !== 'RESOLVIDA') { ?>
+                                    <?php if (!in_array($nc['status'], ['RESOLVIDA', 'NAO RESOLVIDA'])) { ?>
                                         <button type="submit" name="atualizar" title="Salvar status" class="save-button">
                                             <i class="fas fa-save"></i>
                                         </button>
