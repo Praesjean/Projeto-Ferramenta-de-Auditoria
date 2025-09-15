@@ -125,5 +125,4 @@ Swal.fire({
 });
 <?php endif; ?>
 </script>
-
 </html>

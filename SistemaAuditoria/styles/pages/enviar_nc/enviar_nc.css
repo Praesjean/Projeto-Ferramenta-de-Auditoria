@@ -86,7 +86,7 @@ textarea {
     width: 100%;
     min-height: 180px;
     max-height: 400px;
-    resize: vertical;
+    resize: none;
     padding: 10px;
     font-size: 16px;
     font-family: Arial, sans-serif;
@@ -99,7 +99,7 @@ textarea {
     overflow-wrap: break-word;
 }
 
-input[type=email], input[type=text], textarea {
+input[type=email], input[type=text], textarea, select {
     width: 100%;
     padding: 10px;
     margin: 6px 0;
@@ -109,7 +109,7 @@ input[type=email], input[type=text], textarea {
     font-size: 16px;
 }
 
-#itens input {
+#itens input{
     width: 100%;
     box-sizing: border-box;
     margin-bottom: 5px;

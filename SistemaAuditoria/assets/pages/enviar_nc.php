@@ -49,25 +49,26 @@ if ($result->num_rows === 0) {
 
 $nc = $result->fetch_assoc();
 
-$mensagem_template = "Código de Controle: {$nc['nc_id']}\n";
-$mensagem_template .= "Projeto: {$nc['titulo_checklist']}\n";
-$mensagem_template .= "Responsável: \n";
-$mensagem_template .= "Data de Solicitação: ".date("d/m/Y H:i", strtotime($nc['nc_criado']))."\n";
-$mensagem_template .= "Nº de Escalonamentos: \n";
-$mensagem_template .= "Data de Resolução: \n";
-$mensagem_template .= "RQA Responsável: {$nc['auditor_nome']}\n";
-$mensagem_template .= "----------------------------------------\n";
-$mensagem_template .= "Classificação:\n";
-$mensagem_template .= "Descrição: {$nc['descricao_item']}\n";
-$mensagem_template .= "Ação Corretiva Indicada:\n";
-$mensagem_template .= "Observações:";
-
 if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
     $destinatario = trim($_POST['destinatario']);
     $assunto = trim($_POST['assunto']);
-    $mensagem_editada = trim($_POST['mensagem']);
 
-    if (!empty($destinatario) && !empty($assunto) && !empty($mensagem_editada)) {
+    $mensagem_editada =
+        "Código de Controle: {$nc['nc_id']}\n".
+        "Projeto: {$nc['titulo_checklist']}\n".
+        "Responsável: {$_POST['responsavel']}\n".
+        "Data de Solicitação: ".date("d/m/Y H:i", strtotime($nc['nc_criado']))."\n".
+        "Nº de Escalonamentos: {$_POST['escalonamentos']}\n".
+        "Data de Resolução: {$_POST['data_resolucao']}\n".
+        "RQA Responsável: {$nc['auditor_nome']}\n".
+        "----------------------------------------\n".
+        "Classificação: {$_POST['classificacao']}\n".
+        "Prazo: {$_POST['prazo']}\n".
+        "Descrição: {$nc['descricao_item']}\n".
+        "Ação Corretiva Indicada: {$_POST['acao_corretiva']}\n".
+        "Observações: {$_POST['observacoes']}";
+
+    if (!empty($destinatario) && !empty($assunto)) {
         $mail = new PHPMailer(true);
 
         try {
@@ -78,6 +79,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
             $mail->Password   = 'ylqq oeep crzl nkuu';
             $mail->SMTPSecure = PHPMailer::ENCRYPTION_STARTTLS;
             $mail->Port       = 587;
+
+            $mail->CharSet = 'UTF-8';
+            $mail->Encoding = 'base64';
 
             $mail->setFrom('naoconformidades@sistema.com.br', "$usuario_nome (Sistema de Auditoria)");
             $mail->addAddress($destinatario);
@@ -95,7 +99,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
             $msg = "❌ Erro ao enviar e-mail: {$mail->ErrorInfo}";
         }
     } else {
-        $msg = "⚠️ Preencha todos os campos.";
+        $msg = "⚠️ Preencha todos os campos obrigatórios.";
     }
 }
 ?>
@@ -134,10 +138,53 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
             <input type="email" name="destinatario" placeholder="exemplo@gmail.com" required>
 
             <label>Assunto</label>
-            <input type="text" name="assunto" placeholder="Digite o assunto" value="Solicitação de Resolução de Não Conformidade" required>
+            <input type="text" name="assunto" 
+                   value="Solicitação de Resolução de Não Conformidade" required>
 
-            <label>Mensagem</label>
-            <textarea name="mensagem"><?php echo htmlspecialchars($mensagem_template); ?></textarea>
+            <hr>
+
+            <label>Código de Controle</label>
+            <input type="text" value="<?php echo $nc['nc_id']; ?>" readonly>
+
+            <label>Projeto</label>
+            <input type="text" value="<?php echo htmlspecialchars($nc['titulo_checklist']); ?>" readonly>
+
+            <label>Responsável</label>
+            <input type="text" name="responsavel" placeholder="Digite o responsável" required>
+
+            <label>Data de Solicitação</label>
+            <input type="text" value="<?php echo date('d/m/Y H:i', strtotime($nc['nc_criado'])); ?>" readonly>
+
+            <label>Nº de Escalonamentos</label>
+            <input type="text" name="escalonamentos" placeholder="Digite o número">
+
+            <label>Data de Resolução</label>
+            <input type="text" name="data_resolucao" placeholder="Digite a data de resolução">
+
+            <label>RQA Responsável</label>
+            <input type="text" value="<?php echo htmlspecialchars($nc['auditor_nome']); ?>" readonly>
+
+            <hr>
+
+            <label>Classificação</label>
+            <select name="classificacao" id="classificacao" required>
+                <option value="">Selecione...</option>
+                <option value="Baixa">Baixa</option>
+                <option value="Média">Média</option>
+                <option value="Alta">Alta</option>
+            </select>
+
+            <label>Prazo (dias)</label>
+            <input type="text" name="prazo" id="prazo">
+
+            <label>Descrição</label>
+            <input type="text" value="<?php echo htmlspecialchars($nc['descricao_item']); ?>" readonly>
+
+            <label>Ação Corretiva Indicada</label>
+            <textarea name="acao_corretiva" placeholder="Digite a ação corretiva" required></textarea>
+
+            <label>Observações</label>
+            <textarea name="observacoes" placeholder="Digite observações"></textarea>
 
             <div class="btn-container">
                 <button type="submit" name="enviar_email">Enviar</button>
@@ -151,5 +198,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST' && isset($_POST['enviar_email'])) {
         &copy; <?php echo date('Y'); ?> Sistema de Auditoria. Todos os direitos reservados.
         <br>Desenvolvido por: Arthur Rodrigues, Jean Inácio, João Gabriel e Stefany Carlos.
     </footer>
+
+    <script>
+    document.getElementById('classificacao').addEventListener('change', function () {
+        let prazoInput = document.getElementById('prazo');
+        switch (this.value) {
+            case 'Baixa':
+                prazoInput.value = "5 dias";
+                break;
+            case 'Média':
+                prazoInput.value = "3 dias";
+                break;
+            case 'Alta':
+                prazoInput.value = "2 dias";
+                break;
+            default:
+                prazoInput.value = "";
+        }
+    });
+    </script>
 </body>
 </html>
